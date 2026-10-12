@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feat/smart-caller-v0.6.0-daily-kpi-coach
+      - feat/smart-caller-v0.6.1-follow-up-workflow
   pull_request:
     branches:
       - main
