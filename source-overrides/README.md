@@ -4,7 +4,7 @@ A portable Chromium extension combining the Makkaan Sales Sidecar, Investor Mode
 
 ## What's new in 0.6.2
 - Fresh-note workflow: the CRM Comments field is replaced with only the newly typed/refined note. The extension never appends the old field value or adds a timestamp; earlier saved Lead Update entries remain in the activity timeline. Save verification uses stable field read-back and a new activity snapshot when available.
-- Follow-up command center with date, channel, priority, exact next action, current lead auto-reference, overdue/due/upcoming sorting, and mark-complete/remove actions. Completing a planner reminder automatically increments the daily follow-up KPI. Reminders are local and do not create CRM tasks.
+- Follow-up command center with date, channel, priority, exact next action, current lead auto-reference, one-click open of the referenced CRM record, overdue/due/upcoming sorting, and mark-complete/remove actions. Completing a planner reminder automatically increments the daily follow-up KPI. Reminders are local and do not create CRM tasks.
 - Update form remains human-confirmed and Qualification Status remains out of scope.
 
 ## What's new in 0.6.0
