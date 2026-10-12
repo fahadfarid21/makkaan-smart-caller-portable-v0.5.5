@@ -1,4 +1,4 @@
-MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.1 — MANUAL TEST CHECKLIST
+MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.2 — MANUAL TEST CHECKLIST
 
 STATIC BUILD CHECKS (automated in GitHub Actions)
 [ ] manifest.json parses as JSON and reports version 0.6.0.
@@ -13,13 +13,24 @@ INSTALLATION
 [ ] Investor Mode opens and saves its editable assumptions after reload.
 
 FRESH COMMENT + FOLLOW-UP WORKFLOW
-[ ] Refresh an existing lead and verify the Comments box is blank for a new note.
-[ ] Enter a fresh note and confirm the saved comment contains only that note, with no extension-added timestamp.
-[ ] Verify old entries remain visible in the CRM activity timeline.
-[ ] Submit once and confirm Update button prevents duplicate submissions while saving.
-[ ] Add follow-up reminders with date, channel, priority and specific next action; reload side panel and verify persistence.
-[ ] Verify due/overdue/upcoming labels, mark-complete, and remove actions.
+[ ] Open an existing lead directly in Prop 360 and verify the same record is detected in Sidecar.
+[ ] Select a different lead in Queue, open it in CRM, and verify the Sidecar resolves the selected lead ID.
+[ ] Confirm the Comments input is a fresh-note field, not a copy of historical CRM comments.
+[ ] Enter a fresh note and confirm the CRM Comments field is replaced by only that note, with no extension-added timestamp.
+[ ] Verify prior saved Lead Update entries remain visible in the CRM activity timeline.
+[ ] Save once; verify the UI waits for stable read-back / new activity evidence and never automatically resubmits.
+[ ] Confirm only allowed fields change; Qualification Status, owner, source, contact details and lead ID remain unchanged.
+[ ] Add follow-up reminders with date, channel, priority and exact next action; reload side panel and verify persistence.
+[ ] Verify current lead title and ID are prefilled but remain manually editable.
+[ ] Verify due/overdue/upcoming sorting, mark-complete and remove actions.
+[ ] Mark a planner reminder completed and verify the daily follow-up KPI increments exactly once.
 [ ] Confirm local follow-up reminders do not create CRM tasks automatically.
+[ ] Verify the header clearly shows version 0.6.2 and readable high-contrast settings control.
+
+GEMINI BRIEF QUALITY
+[ ] With approved test context and authorization, generate a brief that uses actual latest activity, client requirement and next step rather than generic sales advice.
+[ ] Confirm unknown pricing, availability, approvals and returns are flagged for verification, not invented.
+[ ] Confirm AI Notes returns only a fresh factual note, no timestamp, and preserves the original language/meaning.
 
 DAILY KPI COACH
 [ ] KPI panel appears on Desk.
