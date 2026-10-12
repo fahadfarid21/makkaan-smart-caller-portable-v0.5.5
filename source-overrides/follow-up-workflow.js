@@ -41,7 +41,8 @@
   }
   function render() {
     const host = $('ms-follow-list'); if (!host) return;
-    const open = items.filter(x => !x.done).sort((a,b) => a.date.localeCompare(b.date) || (a.priority === 'High' ? -1 : 1));
+    const priorityRank = {High:0, Normal:1, Low:2};
+    const open = items.filter(x => !x.done).sort((a,b) => a.date.localeCompare(b.date) || (priorityRank[a.priority] ?? 1) - (priorityRank[b.priority] ?? 1));
     const done = items.filter(x => x.done).slice(-3).reverse();
     const shown = [...open, ...done];
     host.innerHTML = shown.length ? shown.map(x => {
@@ -110,10 +111,10 @@
     const title = $('ms-follow-title'), lead = $('ms-follow-lead');
     const leadId = ($('updateLeadId')?.textContent || $('activeLeadId')?.textContent || '').trim();
     const leadTitle = ($('updateLeadTitle')?.textContent || $('activeLeadTitle')?.textContent || '').trim();
-    if (lead && /^CRM-LEAD-\d{4}-\d+$/i.test(leadId) && (!lead.value || lead.dataset.autoValue === lead.dataset.lastAutoValue)) {
+    if (lead && /^CRM-LEAD-\d{4}-\d+$/i.test(leadId) && (!lead.value || lead.value === lead.dataset.lastAutoValue)) {
       lead.value = leadId; lead.dataset.autoValue = leadId; lead.dataset.lastAutoValue = leadId;
     }
-    if (title && leadTitle && !/^No existing lead detected|^Checking active tab|^Could not inspect/i.test(leadTitle) && (!title.value || title.dataset.autoValue === title.dataset.lastAutoValue)) {
+    if (title && leadTitle && !/^No existing lead detected|^Checking active tab|^Could not inspect/i.test(leadTitle) && (!title.value || title.value === title.dataset.lastAutoValue)) {
       title.value = leadTitle; title.dataset.autoValue = leadTitle; title.dataset.lastAutoValue = leadTitle;
     }
   }
