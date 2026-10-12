@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-      - name: Extract base package, apply overrides and deterministic v0.6.2 patches
+      - name: Extract base package, apply overrides and deterministic CRM patches and v0.6.3 Investor UI
         shell: bash
         run: |
           set -euo pipefail
@@ -46,7 +46,7 @@ jobs:
           PY
           cp -a source-overrides/. build/package/
           python3 .github/scripts/apply-v062-patches.py build/package
-          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('build/package/manifest.json','utf8'));if(m.manifest_version!==3||m.version!=='0.6.2')process.exit(1);for(const p of [m.background?.service_worker,m.options_page,m.side_panel?.default_path,...(m.content_scripts||[]).flatMap(x=>x.js||[]),...(Object.values(m.action?.default_icon||{})),...(Object.values(m.icons||{}))])if(p&&!fs.existsSync('build/package/'+p)){console.error('Missing manifest file:',p);process.exit(2)}"
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('build/package/manifest.json','utf8'));if(m.manifest_version!==3||m.version!=='0.6.3')process.exit(1);for(const p of [m.background?.service_worker,m.options_page,m.side_panel?.default_path,...(m.content_scripts||[]).flatMap(x=>x.js||[]),...(Object.values(m.action?.default_icon||{})),...(Object.values(m.icons||{}))])if(p&&!fs.existsSync('build/package/'+p)){console.error('Missing manifest file:',p);process.exit(2)}"
       - name: Check JavaScript syntax
         shell: bash
         run: |
@@ -61,16 +61,18 @@ jobs:
           grep -q 'follow-up-workflow.js' build/package/sidepanel.html
           grep -q 'id="view-desk"' build/package/sidepanel.html
           grep -q 'daily-kpi-coach.js' build/package/sidepanel.html
-          grep -q '0.6.2</span>' build/package/sidepanel.html
+          grep -q '0.6.3</span>' build/package/sidepanel.html
           grep -q 'const newComment = note || null;' build/package/content.js
           ! grep -q 'oldComment' build/package/content.js
           grep -q 'LEAD SNAPSHOT' build/package/sidepanel.js
           ! grep -q 'chrome.runtime.sendMessage = function' build/package/follow-up-workflow.js
           grep -q 'Investor Mode' build/package/README.md
+          grep -q 'mountQuickInvestorCalculator' build/package/investor-mode.js
+          grep -q 'id=\x27quickInvestorCalc\x27' build/package/investor-mode.js
           cd build/package
-          zip -qr ../../Makkaan-Smart-Caller-Complete-Portable-v0.6.2.zip .
+          zip -qr ../../Makkaan-Smart-Caller-Complete-Portable-v0.6.3.zip .
           cd ../..
-          unzip -t Makkaan-Smart-Caller-Complete-Portable-v0.6.2.zip
+          unzip -t Makkaan-Smart-Caller-Complete-Portable-v0.6.3.zip
           sha256sum Makkaan-Smart-Caller-Complete-Portable-v0.6.2.zip | tee SHA256SUMS.txt
       - name: Upload portable release ZIP
         uses: actions/upload-artifact@v4
