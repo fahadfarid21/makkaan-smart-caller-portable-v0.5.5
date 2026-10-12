@@ -1,7 +1,7 @@
-MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.3 — MANUAL TEST CHECKLIST
+MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.4 — MANUAL TEST CHECKLIST
 
 STATIC BUILD CHECKS (automated in GitHub Actions)
-[ ] manifest.json parses as JSON and reports version 0.6.3.
+[ ] manifest.json parses as JSON and reports version 0.6.4.
 [ ] All local manifest entry points exist.
 [ ] Node syntax checks pass for all JavaScript files.
 [ ] Package ZIP builds successfully and includes the required files.
@@ -11,7 +11,8 @@ INSTALLATION
 [ ] Load unpacked in Brave without manifest errors.
 [ ] Side panel opens; Desk, Queue, Calc, Brief, Update, AI Notes and Guide work.
 [ ] Investor Mode opens and saves its editable assumptions after reload.
-[ ] Quick Investor Calculator appears at the top of Investor Mode and remains editable in presentation mode.
+[ ] Quick Investor Calculator appears full-width above the two-column editor/presentation layout, not squeezed into the left column.
+[ ] Quick Investor Calculator remains editable in presentation mode.
 [ ] Change retail area/rate and verify total value, down payment, monthly installment and milestone update immediately.
 [ ] Switch to office; verify office count × area × rate, payment breakdown and copy summary update correctly.
 [ ] Retail and office default installment periods are 30 months (2.5 years); editing months updates the monthly estimate correctly.
@@ -31,7 +32,7 @@ FRESH COMMENT + FOLLOW-UP WORKFLOW
 [ ] Verify due/overdue/upcoming sorting, mark-complete and remove actions.
 [ ] Mark a planner reminder completed and verify the daily follow-up KPI increments exactly once.
 [ ] Confirm local follow-up reminders do not create CRM tasks automatically.
-[ ] Verify the header clearly shows version 0.6.3 and readable high-contrast settings control.
+[ ] Verify the header clearly shows version 0.6.4 and readable high-contrast settings control.
 
 GEMINI BRIEF QUALITY
 [ ] With approved test context and authorization, generate a brief that uses actual latest activity, client requirement and next step rather than generic sales advice.
