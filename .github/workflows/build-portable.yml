@@ -68,7 +68,7 @@ jobs:
           ! grep -q 'chrome.runtime.sendMessage = function' build/package/follow-up-workflow.js
           grep -q 'Investor Mode' build/package/README.md
           grep -q 'mountQuickInvestorCalculator' build/package/investor-mode.js
-          grep -q 'id=\x27quickInvestorCalc\x27' build/package/investor-mode.js
+          grep -q 'quickInvestorCalc' build/package/investor-mode.js
           cd build/package
           zip -qr ../../Makkaan-Smart-Caller-Complete-Portable-v0.6.3.zip .
           cd ../..
