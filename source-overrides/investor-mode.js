@@ -70,5 +70,117 @@ function view(id){document.querySelectorAll('.tab').forEach(b=>b.classList.toggl
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>view(b.dataset.view)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>view(b.dataset.go)));
 $('present').addEventListener('click',()=>{presenting=!presenting;document.body.classList.toggle('presenting',presenting);$('present').textContent=presenting?'↩ Back to editing':'◉ Present to client';$('footerStatus').textContent=presenting?'Client presentation view · assumptions remain editable':'Local scenario · no customer data';view('overview')});$('copyBrief').addEventListener('click',()=>copy(summary(),'copyBrief'));$('copyAssumptions').addEventListener('click',()=>copy(summary(),'copyAssumptions'));$('print').addEventListener('click',()=>window.print());$('reset').addEventListener('click',()=>{Object.entries(defaults).forEach(([k,v])=>$(k).value=v);Object.entries(officeDefaults).forEach(([k,v])=>$(k).value=v);syncRentNote();render();$('editStatus').textContent='Assumptions reset.'});
 $('unit').addEventListener('change',()=>{const rates={lower:60000,ground:90000,first:65000,office:35000};if(rates[$('unit').value])$('rate').value=rates[$('unit').value];if($('unit').value==='office'){$('rentLow').value=125;$('rentBase').value=150;$('rentHigh').value=180;$('rentNote').textContent='Office scenario: 125 / 150 / 180 PKR per sq ft monthly, based on selected larger DHA Phase 1 office asking listings; verify the exact office and terms.'}else if(['lower','ground','first'].includes($('unit').value)){$('rentLow').value=150;$('rentBase').value=250;$('rentHigh').value=500;$('rentNote').textContent='Retail assumptions: 150 / 250 / 500 PKR per sq ft monthly. The 500 scenario is a stretch test informed by one small-unit asking advert—not verified Avenue 18 rent.'}syncRentNote();render()});
-ids.filter(id=>id!=='unit').forEach(id=>$(id).addEventListener('input',render));officeIds.forEach(id=>$(id).addEventListener('input',()=>{renderOffice();save()}));try{const s=JSON.parse(localStorage.getItem('makkaanInvestorMode')||localStorage.getItem('makkaanInvestorMode054')||'{}');ids.forEach(id=>{if(s[id]!==undefined)$(id).value=s[id]});if((s.months===undefined||Number(s.months)===36)&&Number($('months').value)===36) $('months').value=30}catch(e){}try{const o=JSON.parse(localStorage.getItem('makkaanOfficeInvestor')||localStorage.getItem('makkaanOfficeInvestor055')||'{}');officeIds.forEach(id=>{if(o[id]!==undefined)$(id).value=o[id]});if((o.officeMonths===undefined||Number(o.officeMonths)===36)&&Number($('officeMonths').value)===36) $('officeMonths').value=30}catch(e){}syncRentNote();render();
+ids.filter(id=>id!=='unit').forEach(id=>$(id).addEventListener('input',render));officeIds.forEach(id=>$(id).addEventListener('input',()=>{renderOffice();save()}));try{const s=JSON.parse(localStorage.getItem('makkaanInvestorMode')||localStorage.getItem('makkaanInvestorMode054')||'{}');ids.forEach(id=>{if(s[id]!==undefined)$(id).value=s[id]});if((s.months===undefined||Number(s.months)===36)&&Number($('months').value)===36) $('months').value=30}catch(e){}try{const o=JSON.parse(localStorage.getItem('makkaanOfficeInvestor')||localStorage.getItem('makkaanOfficeInvestor055')||'{}');officeIds.forEach(id=>{if(o[id]!==undefined)$(id).value=o[id]});if((o.officeMonths===undefined||Number(o.officeMonths)===36)&&Number($('officeMonths').value)===36) $('officeMonths').value=30}catch(e){}
+/* v0.6.3 — a compact live quote panel reduces manual investor calculations.
+   The original detailed assumptions and presentation controls remain editable. */
+function mountQuickInvestorCalculator(){
+  if($('quickInvestorCalc')||!$('area')||!$('rate')||!$('months')||!$('heroPrice')||!$('officeArea')||!$('officeRate')||!$('officeMonths'))return;
+  const nodeIds=['area','rate','months','heroPrice','mMonthly','officeArea','officeRate','officeMonths','officePrice'];
+  const nodes=nodeIds.map(id=>$(id)).filter(Boolean);
+  if(nodes.length!==nodeIds.length)return;
+  let root=nodes[0].parentElement;
+  while(root&&root!==document.body&&!nodes.every(node=>root.contains(node)))root=root.parentElement;
+  if(!root||root===document.body||!nodes.every(node=>root.contains(node))){
+    root=document.querySelector('#investorModal,#investor-mode,#investorMode,#investorOverlay,.investor-modal,.investor-shell,.investor-mode-root,[role="dialog"]');
+  }
+  if(!root||!nodes.every(node=>root.contains(node)))return;
+  if(!$('quick-investor-calc-style')){
+    const style=document.createElement('style');
+    style.id='quick-investor-calc-style';
+    style.textContent=[
+      '#quickInvestorCalc{box-sizing:border-box;width:100%;margin:12px 0 18px;padding:16px;border:1px solid #c9dfd3;border-radius:16px;background:linear-gradient(145deg,#f4fbf7,#fff);color:#16382c;box-shadow:0 5px 18px rgba(9,70,45,.08)}',
+      '#quickInvestorCalc *{box-sizing:border-box}',
+      '#quickInvestorCalc .qi-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}',
+      '#quickInvestorCalc .qi-eyebrow{font-size:10px;font-weight:900;letter-spacing:.12em;color:#14744d;text-transform:uppercase}',
+      '#quickInvestorCalc h2{margin:4px 0;font-size:19px;line-height:1.25;color:#143b2b}',
+      '#quickInvestorCalc .qi-sub{margin:0;color:#4e6a5e;font-size:12px;line-height:1.45}',
+      '#quickInvestorCalc .qi-pill{display:inline-flex;align-items:center;border-radius:99px;background:#dff3e8;color:#15583b;padding:6px 10px;font-size:11px;font-weight:800;white-space:nowrap}',
+      '#quickInvestorCalc .qi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}',
+      '#quickInvestorCalc .qi-field{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:11px;font-weight:800;color:#2f5142}',
+      '#quickInvestorCalc input,#quickInvestorCalc select{width:100%;min-width:0;border:1px solid #bfd3c7;border-radius:9px;background:#fff;color:#173d2d;padding:9px 10px;font-family:inherit;font-size:13px;font-weight:600;min-height:38px}',
+      '#quickInvestorCalc input:focus,#quickInvestorCalc select:focus{outline:2px solid #319b6d;outline-offset:1px}',
+      '#quickInvestorCalc .qi-assumptions{font-size:11px;line-height:1.5;color:#3d5b4e;background:#eaf6ef;border-radius:9px;padding:9px 10px;margin:8px 0 12px}',
+      '#quickInvestorCalc .qi-results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}',
+      '#quickInvestorCalc .qi-result{padding:11px;border-radius:11px;background:#fff;border:1px solid #dce9e1;min-width:0}',
+      '#quickInvestorCalc .qi-result span{display:block;color:#60756b;font-size:10px;font-weight:800;margin-bottom:6px}',
+      '#quickInvestorCalc .qi-result strong{display:block;color:#164a32;font-size:clamp(13px,1.8vw,19px);line-height:1.25;overflow-wrap:anywhere}',
+      '#quickInvestorCalc .qi-result small{display:block;margin-top:5px;font-size:10px;line-height:1.35;color:#64776d}',
+      '#quickInvestorCalc .qi-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}',
+      '#quickInvestorCalc .qi-copy{border:0;border-radius:9px;padding:10px 13px;background:#08754a;color:#fff;font-weight:800;cursor:pointer}',
+      '#quickInvestorCalc .qi-status{font-size:11px;line-height:1.4;color:#296047}',
+      '#quickInvestorCalc .qi-status.qi-warn{color:#8b5a12}',
+      '#quickInvestorCalc .qi-foot{font-size:10px;line-height:1.45;color:#5b7065;margin:10px 0 0}',
+      '@media(max-width:760px){#quickInvestorCalc .qi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#quickInvestorCalc .qi-results{grid-template-columns:repeat(2,minmax(0,1fr))}#quickInvestorCalc{padding:12px}}'
+    ].join('');
+    document.head.appendChild(style);
+  }
+  const quick=document.createElement('section');
+  quick.id='quickInvestorCalc';
+  quick.setAttribute('aria-label','Quick Investor Calculator');
+  quick.innerHTML=[
+    '<div class="qi-header"><div><div class="qi-eyebrow">Investor Mode · Quick Calculator</div><h2>Get the numbers in seconds</h2><p class="qi-sub">Enter the area and approved rate. The payment breakdown updates automatically.</p></div><span class="qi-pill" id="qiModeBadge">Retail / shop</span></div>',
+    '<div class="qi-grid">',
+    '<label class="qi-field" for="qiUnit">Unit type<select id="qiUnit"><option value="lower">Lower Ground shop</option><option value="ground">Ground Floor shop</option><option value="first">First Floor shop</option><option value="office">Office</option></select></label>',
+    '<label class="qi-field" id="qiOfficeCountWrap" for="qiOfficeUnits" hidden>Number of offices<input id="qiOfficeUnits" type="number" min="1" max="50" step="1" value="1"></label>',
+    '<label class="qi-field" for="qiArea"><span id="qiAreaLabel">Unit area (sq ft)</span><input id="qiArea" type="number" min="1" step="1" inputmode="decimal"></label>',
+    '<label class="qi-field" for="qiRate"><span id="qiRateLabel">Approved rate (PKR / sq ft)</span><input id="qiRate" type="number" min="1" step="1000" inputmode="decimal"></label>',
+    '<label class="qi-field" for="qiMonths">Payment duration (months)<input id="qiMonths" type="number" min="1" max="600" step="1" inputmode="numeric"></label>',
+    '</div>',
+    '<div class="qi-assumptions">Current split: <strong><span id="qiDownPct">25</span>% upfront · <span id="qiInstallPct">65</span>% installments · <span id="qiMilestonePct">10</span>% possession / transfer</strong>. These use the detailed model assumptions and remain editable.</div>',
+    '<div class="qi-results" aria-live="polite">',
+    '<div class="qi-result"><span>Total investment</span><strong id="qiTotal">—</strong><small id="qiTotalContext">Area × rate</small></div>',
+    '<div class="qi-result"><span>Upfront payment</span><strong id="qiDown">—</strong><small id="qiDownContext">Down payment</small></div>',
+    '<div class="qi-result"><span>Monthly installment</span><strong id="qiMonthly">—</strong><small id="qiMonthlyContext">Installment pool ÷ months</small></div>',
+    '<div class="qi-result"><span>Final milestone</span><strong id="qiMilestone">—</strong><small id="qiMilestoneContext">Possession / transfer</small></div>',
+    '</div>',
+    '<div class="qi-actions"><button id="qiCopy" class="qi-copy" type="button">Copy investor summary</button><span id="qiStatus" class="qi-status" role="status">Live estimates · verify approved terms.</span></div>',
+    '<p class="qi-foot">Presentation controls remain editable. These are arithmetic estimates only; confirm the exact unit, approved price, written payment terms and charges before quoting. Detailed rental and future-value scenarios remain available below.</p>'
+  ].join('');
+  const header=root.querySelector(':scope > .investor-header,:scope > .modal-header,:scope > .im-header,:scope > header,:scope > .topbar');
+  if(header)header.insertAdjacentElement('afterend',quick);else root.insertBefore(quick,root.firstElementChild);
+
+  function pushValue(source,mirror){const original=$(source),input=$(mirror);if(!original||!input)return;original.value=input.value;original.dispatchEvent(new Event('input',{bubbles:true}));}
+  function quickSync(){
+    const office=$('unit').value==='office';
+    const areaId=office?'officeArea':'area',rateId=office?'officeRate':'rate',monthsId=office?'officeMonths':'months';
+    const downId=office?'officeDown':'down',installId=office?'officeInstall':'install',milestoneId=office?'officeTransfer':'milestone';
+    $('qiUnit').value=$('unit').value;
+    $('qiOfficeCountWrap').hidden=!office;
+    $('qiAreaLabel').textContent=office?'Area per office (sq ft)':'Unit area (sq ft)';
+    $('qiModeBadge').textContent=office?'Office portfolio':'Retail / shop';
+    $('qiArea').value=$(areaId).value;$('qiRate').value=$(rateId).value;$('qiMonths').value=$(monthsId).value;
+    if(office)$('qiOfficeUnits').value=$('officeUnits').value;
+    const area=Number($(areaId).value),rate=Number($(rateId).value),units=office?Number($('officeUnits').value):1,months=Number($(monthsId).value);
+    const downPct=Number($(downId).value),installPct=Number($(installId).value),milestonePct=Number($(milestoneId).value);
+    const total=area*rate*units,down=total*downPct/100,pool=total*installPct/100,milestone=total*milestonePct/100,monthly=pool/months;
+    $('qiDownPct').textContent=fmt(downPct);$('qiInstallPct').textContent=fmt(installPct);$('qiMilestonePct').textContent=fmt(milestonePct);
+    const sane=[area,rate,units,months,downPct,installPct,milestonePct,total,down,pool,milestone,monthly].every(Number.isFinite)&&area>0&&rate>0&&units>=1&&months>=1;
+    $('qiTotal').textContent=sane?money(total):'Check inputs';$('qiDown').textContent=sane?money(down):'—';$('qiMonthly').textContent=sane?money(monthly):'—';$('qiMilestone').textContent=sane?money(milestone):'—';
+    $('qiTotalContext').textContent=sane?(office?fmt(units)+' office(s) × '+fmt(area)+' sq ft × rate':fmt(area)+' sq ft × rate'):'Enter a positive area and rate';
+    $('qiDownContext').textContent=fmt(downPct)+'% of total value';$('qiMonthlyContext').textContent=fmt(installPct)+'% pool over '+fmt(months)+' months';$('qiMilestoneContext').textContent=fmt(milestonePct)+'% · '+(office?'DHA transfer model':'possession model');
+    const split=downPct+installPct+milestonePct,balanced=Math.abs(split-100)<.001;
+    $('qiStatus').textContent=balanced?'Payment split totals 100% · live estimate.':'Payment split totals '+split.toFixed(2)+'% · review detailed settings.';
+    $('qiStatus').classList.toggle('qi-warn',!balanced);
+  }
+  function copyQuickSummary(){
+    const office=$('unit').value==='office',areaId=office?'officeArea':'area',rateId=office?'officeRate':'rate',monthsId=office?'officeMonths':'months';
+    const downId=office?'officeDown':'down',installId=office?'officeInstall':'install',milestoneId=office?'officeTransfer':'milestone';
+    const area=Number($(areaId).value),rate=Number($(rateId).value),units=office?Number($('officeUnits').value):1,total=area*rate*units;
+    const downPct=Number($(downId).value),installPct=Number($(installId).value),milestonePct=Number($(milestoneId).value),months=Number($(monthsId).value);
+    const line=office?fmt(units)+' office(s) · '+fmt(area)+' sq ft each · combined '+fmt(area*units)+' sq ft':fmt(area)+' sq ft '+$('unit').selectedOptions[0].textContent;
+    copy('MAKKAAN · INVESTOR QUICK SUMMARY\n'+line+'\nApproved rate: '+money(rate)+' / sq ft\nIndicative total value: '+money(total)+'\nDown payment ('+downPct+'%): '+money(total*downPct/100)+'\nInstallment pool ('+installPct+'%): '+money(total*installPct/100)+'\nMonthly installment over '+months+' months: '+money(total*installPct/100/months)+'\n'+(office?'DHA transfer':'Possession')+' milestone ('+milestonePct+'%): '+money(total*milestonePct/100)+'\n\nIllustrative arithmetic only. Confirm approved unit details and written terms before quoting.','qiCopy');
+  }
+  $('qiUnit').addEventListener('change',()=>{$('unit').value=$('qiUnit').value;$('unit').dispatchEvent(new Event('change',{bubbles:true}));quickSync()});
+  $('qiArea').addEventListener('input',()=>{const office=$('unit').value==='office';pushValue(office?'officeArea':'area','qiArea');quickSync()});
+  $('qiRate').addEventListener('input',()=>{const office=$('unit').value==='office';pushValue(office?'officeRate':'rate','qiRate');quickSync()});
+  $('qiMonths').addEventListener('input',()=>{const office=$('unit').value==='office';pushValue(office?'officeMonths':'months','qiMonths');quickSync()});
+  $('qiOfficeUnits').addEventListener('input',()=>{pushValue('officeUnits','qiOfficeUnits');quickSync()});
+  $('qiCopy').addEventListener('click',copyQuickSummary);
+  [...ids,...officeIds].forEach(id=>{if($(id)){ $(id).addEventListener('input',quickSync);$(id).addEventListener('change',quickSync);}});
+  if($('reset'))$('reset').addEventListener('click',()=>{if(window.requestAnimationFrame)requestAnimationFrame(quickSync);else quickSync()});
+  quickSync();
+}
+mountQuickInvestorCalculator();
+
+syncRentNote();render();
 })();
