@@ -40,12 +40,12 @@
     render();
   }
   async function openCrmLead(leadId) {
-    if (!/^CRM-LEAD-\\d{4}-\\d+$/i.test(String(leadId || ''))) return;
+    if (!/^CRM-LEAD-\d{4}-\d+$/i.test(String(leadId || ''))) return;
     const url = 'https://prop-360.com/app/lead/' + leadId;
     const [active] = await chrome.tabs.query({active:true,lastFocusedWindow:true});
     let tabs = [];
     try { tabs = await chrome.tabs.query({url:'https://prop-360.com/app/lead/*',windowId:active?.windowId}); } catch (_) {}
-    const target = tabs.find(t => t.url && /^https:\/\/prop-360\\.com\/app\/lead\/CRM-LEAD-\\d{4}-\\d+/.test(t.url));
+    const target = tabs.find(t => t.url && /^https:\/\/prop-360\.com\/app\/lead\/CRM-LEAD-\d{4}-\d+/.test(t.url));
     if (target?.id != null) await chrome.tabs.update(target.id,{url,active:true});
     else await chrome.tabs.create({url,active:true,windowId:active?.windowId});
   }
@@ -58,7 +58,7 @@
     host.innerHTML = shown.length ? shown.map(x => {
       const label = x.done ? 'COMPLETED' : dueLabel(x.date);
       const cls = !x.done && x.date < today() ? 'mf-badge overdue' : 'mf-badge';
-      const canOpenLead = /^CRM-LEAD-\\d{4}-\\d+$/i.test(String(x.lead || ''));
+      const canOpenLead = /^CRM-LEAD-\d{4}-\d+$/i.test(String(x.lead || ''));
       return `<article class="mf-item"><div class="mf-top"><div class="mf-title">${esc(x.title || 'Follow-up')}</div><span class="${cls}">${label}</span></div><div class="mf-meta">${esc(x.date)} · ${esc(x.channel)} · ${esc(x.priority)} priority<br>${esc(x.action)}${x.lead ? '<br>Lead reference: '+esc(x.lead) : ''}</div><div class="mf-actions">${x.done ? '' : '<button type="button" data-follow-done="'+esc(x.id)+'">Mark completed</button>'}${canOpenLead ? '<button type="button" data-follow-open="'+esc(x.id)+'">Open CRM lead</button>' : ''}<button type="button" data-follow-delete="${esc(x.id)}">Remove</button></div></article>`;
     }).join('') : '<div class="mf-empty">No follow-ups planned yet. Add the next promised action after each real conversation.</div>';
     const due = open.filter(x => x.date <= today()).length;
@@ -93,7 +93,7 @@
     });
     panel.addEventListener('click', async e => {
       const done = e.target.closest('[data-follow-done]'); const del = e.target.closest('[data-follow-delete]'); const open = e.target.closest('[data-follow-open]');
-      if (open) { const item=items.find(x=>x.id===open.dataset.followOpen); if(item && /^CRM-LEAD-\\d{4}-\\d+$/i.test(String(item.lead || ''))) { try { await openCrmLead(item.lead); } catch (_) {} } }
+      if (open) { const item=items.find(x=>x.id===open.dataset.followOpen); if(item && /^CRM-LEAD-\d{4}-\d+$/i.test(String(item.lead || ''))) { try { await openCrmLead(item.lead); } catch (_) {} } }
       if (done) { const item=items.find(x=>x.id===done.dataset.followDone); if(item && !item.done){item.done=true;item.completedAt=new Date().toISOString();await incrementCompletedFollowUpKpi();await persist();} }
       if (del) { items=items.filter(x=>x.id!==del.dataset.followDelete); await persist(); }
     });
