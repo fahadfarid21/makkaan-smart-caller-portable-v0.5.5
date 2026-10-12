@@ -61,7 +61,7 @@ new_save = """    const baselineActivities = new Set((before.recentActivities ||
       newTimelineNote = !!note && (latest.recentActivities || []).some(a => {
         const entry = String(a.text || '').trim();
         if (baselineActivities.has(entry)) return false;
-        const marker = entry.match(/Comments snapshot:\\s*/i);
+        const marker = entry.match(/Comments snapshot:\s*/i);
         if (!marker) return false;
         const snapshot = entry.slice(marker.index + marker[0].length).trim();
         return snapshot === expectedSnapshot;
