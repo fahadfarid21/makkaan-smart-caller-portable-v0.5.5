@@ -25,7 +25,23 @@ jobs:
           test -f Makkaan-Sales-Sidecar-Portable-v0.5.5.zip
           rm -rf build
           mkdir -p build/package
-          unzip -q Makkaan-Sales-Sidecar-Portable-v0.5.5.zip -d build/package
+          python3 - <<'PY'
+          import pathlib, zipfile
+          archive = pathlib.Path('Makkaan-Sales-Sidecar-Portable-v0.5.5.zip')
+          root = pathlib.Path('build/package')
+          with zipfile.ZipFile(archive) as zf:
+              for item in zf.infolist():
+                  # The original Windows-created ZIP stores backslashes as separators.
+                  name = item.filename.replace('\\\\', '/')
+                  target = (root / name).resolve()
+                  if root.resolve() not in target.parents and target != root.resolve():
+                      raise SystemExit(f'Unsafe archive path: {item.filename!r}')
+                  if item.is_dir():
+                      target.mkdir(parents=True, exist_ok=True)
+                  else:
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      target.write_bytes(zf.read(item))
+          PY
           cp -a source-overrides/. build/package/
           node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('build/package/manifest.json','utf8'));if(m.manifest_version!==3||m.version!=='0.6.0')process.exit(1);for(const p of [m.background?.service_worker,m.options_page,m.side_panel?.default_path,...(m.content_scripts||[]).flatMap(x=>x.js||[]),...(Object.values(m.action?.default_icon||{})),...(Object.values(m.icons||{}))])if(p&&!fs.existsSync('build/package/'+p)){console.error('Missing manifest file:',p);process.exit(2)}"
       - name: Check JavaScript syntax
