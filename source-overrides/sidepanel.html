@@ -189,12 +189,12 @@
       <form id="updateForm">
         <div class="panel">
           <label for="mode">Update type</label><select id="mode"><option value="call">Call result â€” update Status</option><option value="note">Quick Note â€” leave Status unchanged</option></select>
-          <div class="fieldgrid"><div><label for="quality">Lead quality</label><select id="quality"><option value="__KEEP__">Keep existing</option><option>Cold</option><option>Average</option><option>Hot</option><option>very Hot</option><option>Favorite</option></select></div><div><label for="status">Actual call outcome</label><select id="status"><option value="">Choose resultâ€¦</option><option>Connected</option><option>Not Connected</option></select></div></div>
+          <div class="fieldgrid"><div><label for="quality">Lead quality</label><select id="quality"><option value="__KEEP__">Keep existing</option><option>Cold</option><option>Average</option><option>Hot</option></select></div><div><label for="status">Actual call outcome</label><select id="status"><option value="">Choose resultâ€¦</option><option>Connected</option><option>Not Connected</option></select></div></div>
           <p id="statusHint" class="hint">Choose the actual outcome of a real call.</p>
           <label for="nextDate">Next activity date <span class="muted">(blank = unchanged)</span></label><input id="nextDate" type="date">
           <label for="comment">Rough notes / comments</label><textarea id="comment" rows="4" maxlength="1500" placeholder="Short facts: what happened, what the prospect asked, agreed next stepâ€¦"></textarea>
           <div class="row gap8"><button id="refineInline" class="btn btn-secondary grow" type="button">âœ¦ Refine note</button><button id="openNotes" class="btn btn-ghost" type="button">AI Notes</button></div>
-          <div class="scope"><strong>Only five fields are in scope:</strong> Lead Quality (if changed), Status (call mode only), Activity Type = Call, Next Activity Date (if entered), and Comments (append only). Owner, source, contact details, qualification status and lead ID are untouched.</div>
+          <div class="scope"><strong>Only these five fields may be updated:</strong> Lead Quality (Hot, Average, or Cold), Status (only Connected or Not Connected in Call mode), Activity Type = Call, Next Activity Date (if entered), and Comments (append only). <strong>Qualification Status is never changed.</strong> Owner, source, contact details, lead name, and lead ID remain untouched. Nothing is saved until you confirm.</div>
           <button id="saveUpdate" class="btn btn-primary full" type="submit" disabled>Review &amp; save existing lead</button><div id="updateMessage" class="message">No CRM changes until you confirm.</div>
         </div>
       </form>
