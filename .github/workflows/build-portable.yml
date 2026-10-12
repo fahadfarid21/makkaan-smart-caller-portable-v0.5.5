@@ -43,7 +43,7 @@ jobs:
                       target.write_bytes(zf.read(item))
           PY
           cp -a source-overrides/. build/package/
-          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('build/package/manifest.json','utf8'));if(m.manifest_version!==3||m.version!=='0.6.0')process.exit(1);for(const p of [m.background?.service_worker,m.options_page,m.side_panel?.default_path,...(m.content_scripts||[]).flatMap(x=>x.js||[]),...(Object.values(m.action?.default_icon||{})),...(Object.values(m.icons||{}))])if(p&&!fs.existsSync('build/package/'+p)){console.error('Missing manifest file:',p);process.exit(2)}"
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('build/package/manifest.json','utf8'));if(m.manifest_version!==3||m.version!=='0.6.1')process.exit(1);for(const p of [m.background?.service_worker,m.options_page,m.side_panel?.default_path,...(m.content_scripts||[]).flatMap(x=>x.js||[]),...(Object.values(m.action?.default_icon||{})),...(Object.values(m.icons||{}))])if(p&&!fs.existsSync('build/package/'+p)){console.error('Missing manifest file:',p);process.exit(2)}"
       - name: Check JavaScript syntax
         shell: bash
         run: |
@@ -54,13 +54,15 @@ jobs:
         run: |
           set -euo pipefail
           test -f build/package/daily-kpi-coach.js
+          test -f build/package/follow-up-workflow.js
+          grep -q 'follow-up-workflow.js' build/package/sidepanel.html
           grep -q 'id="view-desk"' build/package/sidepanel.html
           grep -q 'daily-kpi-coach.js' build/package/sidepanel.html
           grep -q 'Investor Mode' build/package/README.md
           cd build/package
-          zip -qr ../../Makkaan-Smart-Caller-Complete-Portable-v0.6.0.zip .
+          zip -qr ../../Makkaan-Smart-Caller-Complete-Portable-v0.6.1.zip .
           cd ../..
-          unzip -t Makkaan-Smart-Caller-Complete-Portable-v0.6.0.zip
+          unzip -t Makkaan-Smart-Caller-Complete-Portable-v0.6.1.zip
           sha256sum Makkaan-Smart-Caller-Complete-Portable-v0.6.0.zip | tee SHA256SUMS.txt
       - name: Upload portable release ZIP
         uses: actions/upload-artifact@v4
