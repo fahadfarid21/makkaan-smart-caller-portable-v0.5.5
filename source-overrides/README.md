@@ -2,7 +2,7 @@
 
 A portable Chromium extension combining the Makkaan Sales Sidecar, Investor Mode, local lead queue, calculator, pre-call briefs, guided CRM updates and a daily execution coach.
 
-## What's new in 0.6.1
+## What's new in 0.6.2
 - Fresh-note workflow: the CRM Comments field is replaced with only the newly typed/refined note. The extension never appends the old field value or adds a timestamp; earlier saved Lead Update entries remain in the activity timeline. Save verification uses stable field read-back and a new activity snapshot when available.
 - Follow-up command center with date, channel, priority, exact next action, current lead auto-reference, overdue/due/upcoming sorting, and mark-complete/remove actions. Completing a planner reminder automatically increments the daily follow-up KPI. Reminders are local and do not create CRM tasks.
 - Update form remains human-confirmed and Qualification Status remains out of scope.
@@ -25,7 +25,7 @@ A portable Chromium extension combining the Makkaan Sales Sidecar, Investor Mode
 1. Import your approved lead CSV into Queue.
 2. Work the lead list and record the real call outcome in the CRM through the guided update flow. Put only the fresh note in the Comments box; the prior history is already in CRM activities.
 3. After every meaningful conversation, add a follow-up reminder with a date, channel, priority and concrete next action. Mark it completed only after the action is done.
-4. Use the KPI coach to log a follow-up, meeting, CRM lead addition or qualified opportunity only after it actually happens.
+4. Mark planner reminders complete to count follow-ups automatically. Use the manual KPI action only for completed follow-ups tracked outside the planner; log meetings, CRM additions and qualified opportunities only after they actually happen.
 5. Keep the monthly target measure consistent with the KPI definition used by your manager.
 6. Use Investor Mode for client presentations, but verify current approved unit rates, availability, payment terms, rental evidence and assumptions before quoting.
 
