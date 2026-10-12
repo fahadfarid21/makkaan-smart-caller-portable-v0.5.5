@@ -22,6 +22,7 @@ FRESH COMMENT + FOLLOW-UP WORKFLOW
 [ ] Confirm only allowed fields change; Qualification Status, owner, source, contact details and lead ID remain unchanged.
 [ ] Add follow-up reminders with date, channel, priority and exact next action; reload side panel and verify persistence.
 [ ] Verify current lead title and ID are prefilled but remain manually editable.
+[ ] Use Open CRM lead from a reminder and verify it opens only a valid Prop 360 CRM-LEAD URL.
 [ ] Verify due/overdue/upcoming sorting, mark-complete and remove actions.
 [ ] Mark a planner reminder completed and verify the daily follow-up KPI increments exactly once.
 [ ] Confirm local follow-up reminders do not create CRM tasks automatically.
