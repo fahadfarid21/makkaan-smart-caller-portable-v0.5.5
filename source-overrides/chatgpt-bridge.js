@@ -34,11 +34,11 @@
 
   function redactObviousIdentifiers(value) {
     return String(value || '')
-      .replace(/\\bCRM-LEAD-[A-Z0-9-]+\\b/gi, '[CRM LEAD ID]')
-      .replace(/\\b\\d{5}-\\d{7}-\\d\\b/g, '[CNIC]')
-      .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi, '[EMAIL]')
-      .replace(/(?:\\+?92|0092|0)[\\s().-]*(?:3\\d{2}|[1-9]\\d{1,2})[\\s().-]*\\d{3,4}[\\s().-]*\\d{3,4}\\b/g, '[PHONE]')
-      .replace(/\\b(?:\\d[ -]*?){15,19}\\b/g, '[LONG ID]');
+      .replace(/\bCRM-LEAD-[A-Z0-9-]+\b/gi, '[CRM LEAD ID]')
+      .replace(/\b\d{5}-\d{7}-\d\b/g, '[CNIC]')
+      .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[EMAIL]')
+      .replace(/(?:\+?92|0092|0)[\s().-]*(?:3\d{2}|[1-9]\d{1,2})[\s().-]*\d{3,4}[\s().-]*\d{3,4}\b/g, '[PHONE]')
+      .replace(/\b(?:\d[ -]*?){15,19}\b/g, '[LONG ID]');
   }
 
   function getAnchor() {
