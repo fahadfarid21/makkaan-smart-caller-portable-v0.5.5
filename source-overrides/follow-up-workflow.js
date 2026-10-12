@@ -7,9 +7,6 @@
   const today = () => { const d = new Date(); return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-'); };
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let items = [];
-  let activeLeadKey = '';
-  let saveArmed = false;
-  let originalSendMessage = null;
   const dueLabel = d => d < today() ? 'OVERDUE' : d === today() ? 'DUE TODAY' : 'UPCOMING';
   function addStyles() {
     if ($('ms-follow-style')) return;
@@ -77,74 +74,57 @@
       if (e.target.id !== 'ms-follow-form') return;
       e.preventDefault();
       const action = $('ms-follow-action').value.trim(); if (!action) return;
+      syncLeadReference();
       items.push({id: 'fu-'+Date.now()+'-'+Math.random().toString(36).slice(2,7), title:$('ms-follow-title').value.trim(), date:$('ms-follow-date').value || today(), channel:$('ms-follow-channel').value, priority:$('ms-follow-priority').value, lead:$('ms-follow-lead').value.trim(), action, done:false, createdAt:new Date().toISOString()});
       $('ms-follow-action').value=''; $('ms-follow-title').value=''; $('ms-follow-lead').value='';
       await persist();
     });
     panel.addEventListener('click', async e => {
       const done = e.target.closest('[data-follow-done]'); const del = e.target.closest('[data-follow-delete]');
-      if (done) { const item=items.find(x=>x.id===done.dataset.followDone); if(item){item.done=true;item.completedAt=new Date().toISOString();await persist();} }
+      if (done) { const item=items.find(x=>x.id===done.dataset.followDone); if(item && !item.done){item.done=true;item.completedAt=new Date().toISOString();await incrementCompletedFollowUpKpi();await persist();} }
       if (del) { items=items.filter(x=>x.id!==del.dataset.followDelete); await persist(); }
     });
   }
-  function leadKey() {
-    const id = $('updateLeadId')?.textContent?.trim() || $('activeLeadId')?.textContent?.trim() || '';
-    return id.replace(/^Checking.*$/i,'').replace(/^No existing lead detected$/i,'');
-  }
   function setupFreshComment() {
-    const field = $('comment'), refresh = $('refreshUpdateLead');
+    const field = $('comment');
     if (!field || field.dataset.freshNoteReady) return;
     field.dataset.freshNoteReady = '1';
-    const tip = document.createElement('div'); tip.id='commentFreshNote';
-    tip.textContent='Fresh note only: when you focus this box for a new update, the prefilled old Comments text is cleared. Previous entries remain in the CRM activity timeline. Write only the new note; no timestamp is needed.';
-    field.insertAdjacentElement('afterend',tip);
-    field.addEventListener('focus', () => {
-      const key = leadKey();
-      if (key && key !== activeLeadKey) { activeLeadKey = key; field.value=''; }
-      else if (!field.dataset.freshNoteStarted) { field.value=''; }
-      field.dataset.freshNoteStarted='1';
-    });
-    refresh?.addEventListener('click', () => { activeLeadKey=''; field.dataset.freshNoteStarted=''; field.value=''; }, true);
-    $('refreshLead')?.addEventListener('click', () => { activeLeadKey=''; field.dataset.freshNoteStarted=''; field.value=''; }, true);
-    $('saveUpdate')?.addEventListener('click', () => { saveArmed=true; }, true);
-    $('updateForm')?.addEventListener('submit', () => { saveArmed=true; }, true);
-    // Last-mile guard: ensure any CRM write payload carries only the fresh note, never the historical comments or a generated timestamp.
-    if (chrome?.runtime?.sendMessage && !window.__msFreshCommentSendGuard) {
-      window.__msFreshCommentSendGuard = true;
-      originalSendMessage = chrome.runtime.sendMessage.bind(chrome.runtime);
-      chrome.runtime.sendMessage = function(...args) {
-        if (saveArmed && args[0] && typeof args[0] === 'object') {
-          const msg = structuredCloneSafe(args[0]);
-          const fresh = String(field.value || '').trim();
-          let changed = false;
-          const visit = (obj, depth=0) => {
-            if (!obj || typeof obj !== 'object' || depth > 7) return;
-            for (const key of Object.keys(obj)) {
-              const value = obj[key];
-              if (/^(comments?|comment_text|commentText|notes?)$/i.test(key) && typeof value === 'string') {
-                obj[key] = fresh; changed = true;
-              } else if (value && typeof value === 'object') visit(value, depth+1);
-            }
-          };
-          visit(msg);
-          if (changed && /update|save|lead|crm|comment|note/i.test(JSON.stringify(msg).slice(0,2000))) {
-            args[0] = msg;
-            saveArmed = false;
-          }
-        }
-        return originalSendMessage(...args);
-      };
+    const tip = document.createElement('div');
+    tip.id = 'commentFreshNote';
+    tip.textContent = 'Fresh note only. The CRM Comments field is replaced with this text when you confirm the update. Earlier saved entries remain in the activity timeline. No timestamp is added. Your typed draft is never cleared just because you focus the box.';
+    field.insertAdjacentElement('afterend', tip);
+  }
+  async function incrementCompletedFollowUpKpi() {
+    try {
+      const d = new Date();
+      const key = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+      const data = await chrome.storage.local.get(['msKpiDaily']);
+      const daily = data.msKpiDaily && typeof data.msKpiDaily === 'object' ? data.msKpiDaily : {};
+      const todayData = daily[key] && typeof daily[key] === 'object' ? daily[key] : {};
+      todayData.followUps = Math.max(0, Number(todayData.followUps) || 0) + 1;
+      daily[key] = todayData;
+      await chrome.storage.local.set({msKpiDaily: daily});
+    } catch (_) {}
+  }
+  function syncLeadReference() {
+    const title = $('ms-follow-title'), lead = $('ms-follow-lead');
+    const leadId = ($('updateLeadId')?.textContent || $('activeLeadId')?.textContent || '').trim();
+    const leadTitle = ($('updateLeadTitle')?.textContent || $('activeLeadTitle')?.textContent || '').trim();
+    if (lead && /^CRM-LEAD-\d{4}-\d+$/i.test(leadId) && (!lead.value || lead.dataset.autoValue === lead.dataset.lastAutoValue)) {
+      lead.value = leadId; lead.dataset.autoValue = leadId; lead.dataset.lastAutoValue = leadId;
+    }
+    if (title && leadTitle && !/^No existing lead detected|^Checking active tab|^Could not inspect/i.test(leadTitle) && (!title.value || title.dataset.autoValue === title.dataset.lastAutoValue)) {
+      title.value = leadTitle; title.dataset.autoValue = leadTitle; title.dataset.lastAutoValue = leadTitle;
     }
   }
-  function structuredCloneSafe(obj) { try { return structuredClone(obj); } catch (_) { return JSON.parse(JSON.stringify(obj)); } }
   async function init() {
     if (!chrome?.storage?.local) return;
-    addStyles(); ensurePanel(); setupFreshComment();
+    addStyles(); ensurePanel(); setupFreshComment(); syncLeadReference();
     const data = await chrome.storage.local.get([KEY]);
     items = Array.isArray(data[KEY]) ? data[KEY] : [];
     render();
     chrome.storage.onChanged.addListener((changes, area) => { if (area==='local' && changes[KEY]) { items=Array.isArray(changes[KEY].newValue)?changes[KEY].newValue:[];render(); }});
-    const observer = new MutationObserver(() => { ensurePanel(); setupFreshComment(); });
+    const observer = new MutationObserver(() => { ensurePanel(); setupFreshComment(); syncLeadReference(); });
     observer.observe(document.body, {childList:true,subtree:true});
   }
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>init().catch(()=>{}),{once:true}); else init().catch(()=>{});
