@@ -1,4 +1,4 @@
-MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.0 — MANUAL TEST CHECKLIST
+MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.1 — MANUAL TEST CHECKLIST
 
 STATIC BUILD CHECKS (automated in GitHub Actions)
 [ ] manifest.json parses as JSON and reports version 0.6.0.
@@ -11,6 +11,15 @@ INSTALLATION
 [ ] Load unpacked in Brave without manifest errors.
 [ ] Side panel opens; Desk, Queue, Calc, Brief, Update, AI Notes and Guide work.
 [ ] Investor Mode opens and saves its editable assumptions after reload.
+
+FRESH COMMENT + FOLLOW-UP WORKFLOW
+[ ] Refresh an existing lead and verify the Comments box is blank for a new note.
+[ ] Enter a fresh note and confirm the saved comment contains only that note, with no extension-added timestamp.
+[ ] Verify old entries remain visible in the CRM activity timeline.
+[ ] Submit once and confirm Update button prevents duplicate submissions while saving.
+[ ] Add follow-up reminders with date, channel, priority and specific next action; reload side panel and verify persistence.
+[ ] Verify due/overdue/upcoming labels, mark-complete, and remove actions.
+[ ] Confirm local follow-up reminders do not create CRM tasks automatically.
 
 DAILY KPI COACH
 [ ] KPI panel appears on Desk.
@@ -31,6 +40,7 @@ CRM TESTING — AUTHORIZED TEST RECORD ONLY
 [ ] Detect a test lead and read the timeline.
 [ ] Preview exact proposed fields and comment before saving.
 [ ] Confirm native CRM save and inspect the resulting record.
+[ ] Verify only allowed fields change; Qualification Status, owner, source, contact details and lead ID remain unchanged.
 [ ] Confirm no auto-dialing or unsupervised CRM write occurs.
 [ ] Inspect browser console/service worker errors.
 
