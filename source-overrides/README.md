@@ -1,10 +1,10 @@
-# Makkaan Smart Caller Complete Portable v0.6.1
+# Makkaan Smart Caller Complete Portable v0.6.2
 
 A portable Chromium extension combining the Makkaan Sales Sidecar, Investor Mode, local lead queue, calculator, pre-call briefs, guided CRM updates and a daily execution coach.
 
 ## What's new in 0.6.1
-- Fresh-note workflow: focusing the Comments box clears the prefilled historical text; old entries remain in the CRM activity timeline. The save-message guard replaces comment fields with only the fresh note and does not add a timestamp in the extension note.
-- Follow-up command center with date, channel, priority, exact next action, optional CRM reference, overdue/due/upcoming sorting, and mark-complete/remove actions. Reminders are local and do not create CRM tasks.
+- Fresh-note workflow: the CRM Comments field is replaced with only the newly typed/refined note. The extension never appends the old field value or adds a timestamp; earlier saved Lead Update entries remain in the activity timeline. Save verification uses stable field read-back and a new activity snapshot when available.
+- Follow-up command center with date, channel, priority, exact next action, current lead auto-reference, overdue/due/upcoming sorting, and mark-complete/remove actions. Completing a planner reminder automatically increments the daily follow-up KPI. Reminders are local and do not create CRM tasks.
 - Update form remains human-confirmed and Qualification Status remains out of scope.
 
 ## What's new in 0.6.0
