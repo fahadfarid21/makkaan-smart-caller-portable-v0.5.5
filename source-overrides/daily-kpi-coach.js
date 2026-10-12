@@ -57,7 +57,7 @@
       </div>
       <div class="mk-focus" id="mk-focus" aria-live="polite">Next best action: complete your first verified call update.</div>
       <div class="mk-actions">
-        <button type="button" class="mk-action" data-kpi="followUps">+ Follow-up completed</button>
+        <button type="button" class="mk-action" data-kpi="followUps">+ Log external follow-up</button>
         <button type="button" class="mk-action" data-kpi="meetings">+ Meeting booked</button>
         <button type="button" class="mk-action" data-kpi="leadsAdded">+ Lead added to CRM</button>
         <button type="button" class="mk-action" data-kpi="opportunities">+ Qualified opportunity</button>
@@ -68,7 +68,7 @@
         <label>Monthly meetings target<input id="mk-target-meetings" type="number" min="1" max="100" step="1"></label>
         <div class="mk-value-row"><label>Monthly personal target (PKR)<input id="mk-target-value" type="number" min="1" max="100000000000" step="1000"></label><label>Progress so far (PKR)<input id="mk-value-progress" type="number" min="0" max="100000000000" step="1000"></label></div>
       </div>
-      <p class="mk-foot">Call outcomes count only after the CRM save is verified. Log meetings, follow-ups, CRM additions and opportunities manually when actually completed. Keep the monthly target basis consistent with your manager's KPI definition. Data stays in this browser profile.</p>`;
+      <p class="mk-foot">Call outcomes count only after the CRM save is verified. Mark a reminder completed in Follow-up Command Center to count it automatically; use the manual follow-up button only for completed actions tracked outside the planner. Log meetings, CRM additions and opportunities only when actually completed. Keep the monthly target basis consistent with your manager’s KPI definition. Data stays in this browser profile.</p>`;
     const grid=desk.querySelector('.kpi-grid');
     if(grid&&grid.parentElement===desk) grid.insertAdjacentElement('afterend',panel); else desk.prepend(panel);
     panel.addEventListener('click',async e=>{const b=e.target.closest('[data-kpi]');if(!b)return;const key=b.dataset.kpi;const d=dayKey();daily[d]={...blankDay(),...(daily[d]||{})};daily[d][key]=Math.max(0,num(daily[d][key]))+1;await chrome.storage.local.set({[DAY_KEY]:daily});render();});
