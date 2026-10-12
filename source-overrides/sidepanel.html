@@ -206,9 +206,9 @@
           <div class="fieldgrid"><div><label for="quality">Lead quality</label><select id="quality"><option value="__KEEP__">Keep existing</option><option>Cold</option><option>Average</option><option>Hot</option></select></div><div><label for="status">Actual call outcome</label><select id="status"><option value="">Choose resultâ€¦</option><option>Connected</option><option>Not Connected</option></select></div></div>
           <p id="statusHint" class="hint">Choose the actual outcome of a real call.</p>
           <label for="nextDate">Next activity date <span class="muted">(blank = unchanged)</span></label><input id="nextDate" type="date">
-          <label for="comment">Rough notes / comments</label><textarea id="comment" rows="4" maxlength="1500" placeholder="Short facts: what happened, what the prospect asked, agreed next stepâ€¦"></textarea>
+          <label for="comment">Fresh note / new comments only</label><textarea id="comment" rows="4" maxlength="1500" placeholder="Short facts: what happened, what the prospect asked, agreed next stepâ€¦"></textarea>
           <div class="row gap8"><button id="refineInline" class="btn btn-secondary grow" type="button">âœ¦ Refine note</button><button id="openNotes" class="btn btn-ghost" type="button">AI Notes</button></div>
-          <div class="scope"><strong>Only these five fields may be updated:</strong> Lead Quality (Hot, Average, or Cold), Status (only Connected or Not Connected in Call mode), Activity Type = Call, Next Activity Date (if entered), and Comments (append only). <strong>Qualification Status is never changed.</strong> Owner, source, contact details, lead name, and lead ID remain untouched. Nothing is saved until you confirm.</div>
+          <div class="scope"><strong>Only these five fields may be updated:</strong> Lead Quality (Hot, Average, or Cold), Status (only Connected or Not Connected in Call mode), Activity Type = Call, Next Activity Date (if entered), and Comments (replace the prefilled Comments text with the fresh note; prior entries remain in the CRM activity timeline). <strong>Qualification Status is never changed.</strong> Owner, source, contact details, lead name, and lead ID remain untouched. Nothing is saved until you confirm.</div>
           <button id="saveUpdate" class="btn btn-primary full" type="submit" disabled>Review &amp; save existing lead</button><div id="updateMessage" class="message">No CRM changes until you confirm.</div>
         </div>
       </form>
@@ -244,5 +244,6 @@
   <script src="investor-launcher.js"></script>
   <script src="sidecar-shell-polish.js"></script>
   <script src="chatgpt-bridge.js"></script>
+  <script src="follow-up-workflow.js"></script>
 </body>
 </html>
