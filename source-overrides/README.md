@@ -1,8 +1,11 @@
-# Makkaan Smart Caller Complete Portable v0.6.2
+# Makkaan Smart Caller Complete Portable v0.6.3
 
 A portable Chromium extension combining the Makkaan Sales Sidecar, Investor Mode, local lead queue, calculator, pre-call briefs, guided CRM updates and a daily execution coach.
 
-## What's new in 0.6.2
+## What's new in 0.6.3
+- New Quick Investor Calculator: enter unit type, area, approved rate and plan duration; total value, down payment, monthly installment and possession/transfer milestone calculate live. Supports office quantity and copies a concise client-ready summary.
+- Keeps presentation controls editable and retains detailed rent, inflation and future-value scenarios below the quick calculator.
+- Default payment schedule remains 30 months (2.5 years) for retail and office models.
 - Investor Mode payment schedule defaults to 30 months (2.5 years) for retail and office models; previously saved 36-month defaults are migrated to 30 months. Editable month counts remain available.
 - Top navigation tabs use enforced high-contrast text and active/hover/focus states for reliable readability in Brave's side panel.
 - Fresh-note workflow: the CRM Comments field is replaced with only the newly typed/refined note. The extension never appends the old field value or adds a timestamp; earlier saved Lead Update entries remain in the activity timeline. Save verification uses stable field read-back and a new activity snapshot when available.
