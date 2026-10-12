@@ -18,14 +18,21 @@
     .agentnav .navbtn { color: #e8fff3 !important; border-color: rgba(255,255,255,.22) !important; }
     .agentnav .navbtn.active { background: #ffffff !important; color: #075b3b !important; font-weight: 800 !important; }
     .agentnav .navbtn:focus-visible, .topbar button:focus-visible { outline: 3px solid #f4c95d !important; outline-offset: 2px; }
+  
+    /* Final high-specificity contrast rules: shell polish must not turn the green header white. */
+    body header.topbar { background: linear-gradient(135deg,#043b29 0%,#075b3b 58%,#08784b 100%) !important; color:#ffffff !important; border-bottom:3px solid #032d20 !important; }
+    body header.topbar h1, body header.topbar .brandline, body header.topbar .brandline span, body header.topbar .eyebrow, body header.topbar .sub, body header.topbar .version { color:#ffffff !important; font-weight:850 !important; opacity:1 !important; }
+    body header.topbar .brandsep { color:#c7f0d8 !important; }
+    body header.topbar .version { background:#032f20 !important; border:1px solid #bde8cf !important; min-width:48px; text-align:center; padding:3px 8px; font-size:10px !important; letter-spacing:.04em !important; }
+    body header.topbar .iconbtn { background:#ffffff !important; color:#043b29 !important; border:2px solid #bde8cf !important; font-weight:900 !important; box-shadow:0 2px 8px rgba(0,0,0,.24) !important; min-width:42px; min-height:42px; }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="brandline"><span class="brandmark"><span></span></span><span>MAKKAAN</span><span class="brandsep">/</span><span>SALES SIDECAR</span><span class="version">0.6.0</span></div>
+    <div class="brandline"><span class="brandmark"><span></span></span><span>MAKKAAN</span><span class="brandsep">/</span><span>SALES SIDECAR</span><span class="version" title="Installed extension version">0.6.2</span></div>
     <div class="headrow">
       <div><p class="eyebrow">YOUR DAILY SALES DESK</p><h1>Call smarter.</h1><p class="sub">Less admin. Better conversations.</p></div>
-      <button id="settingsBtn" class="iconbtn" title="AI settings" aria-label="AI settings">âš™</button>
+      <button id="settingsBtn" class="iconbtn" title="AI settings" aria-label="AI settings">⚙</button>
     </div>
   </header>
   <nav class="agentnav" aria-label="Sales Sidecar tools">
@@ -39,7 +46,7 @@
   </nav>
 <div id="investor-mode-shortcut" style="margin:10px 0 12px;padding:11px 12px;border:1px solid #dbe6e1;border-radius:12px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:0 3px 12px rgba(23,45,60,.04);">
   <div style="min-width:0;"><div style="font-size:10px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;color:#236a57;">Investor Mode</div><div style="font-size:10px;line-height:1.35;color:#667987;margin-top:3px;">Client-ready Avenue 18 investment presentation</div></div>
-  <button type="button" id="investorModeLaunch" style="flex:0 0 auto;border:1px solid #236a57;border-radius:8px;background:#236a57;color:#ffffff;padding:8px 10px;font-size:10px;font-weight:850;cursor:pointer;">Open â†—</button>
+  <button type="button" id="investorModeLaunch" style="flex:0 0 auto;border:1px solid #236a57;border-radius:8px;background:#236a57;color:#ffffff;padding:8px 10px;font-size:10px;font-weight:850;cursor:pointer;">Open ↗</button>
 </div>
 
   <main>
@@ -206,9 +213,9 @@
           <div class="fieldgrid"><div><label for="quality">Lead quality</label><select id="quality"><option value="__KEEP__">Keep existing</option><option>Cold</option><option>Average</option><option>Hot</option></select></div><div><label for="status">Actual call outcome</label><select id="status"><option value="">Choose resultâ€¦</option><option>Connected</option><option>Not Connected</option></select></div></div>
           <p id="statusHint" class="hint">Choose the actual outcome of a real call.</p>
           <label for="nextDate">Next activity date <span class="muted">(blank = unchanged)</span></label><input id="nextDate" type="date">
-          <label for="comment">Fresh note / new comments only</label><textarea id="comment" rows="4" maxlength="1500" placeholder="Short facts: what happened, what the prospect asked, agreed next stepâ€¦"></textarea>
+          <label for="comment">Fresh note / new comments only</label><textarea id="comment" rows="4" maxlength="1500" placeholder="Fresh note only. Previous saved entries remain in the CRM activity timeline."></textarea>
           <div class="row gap8"><button id="refineInline" class="btn btn-secondary grow" type="button">âœ¦ Refine note</button><button id="openNotes" class="btn btn-ghost" type="button">AI Notes</button></div>
-          <div class="scope"><strong>Only these five fields may be updated:</strong> Lead Quality (Hot, Average, or Cold), Status (only Connected or Not Connected in Call mode), Activity Type = Call, Next Activity Date (if entered), and Comments (replace the prefilled Comments text with the fresh note; prior entries remain in the CRM activity timeline). <strong>Qualification Status is never changed.</strong> Owner, source, contact details, lead name, and lead ID remain untouched. Nothing is saved until you confirm.</div>
+          <div class="scope"><strong>Only these five fields may be updated:</strong> Lead Quality (Hot, Average, or Cold), Status (only Connected or Not Connected in Call mode), Activity Type = Call, Next Activity Date (if entered), and Comments (replace the current Comments field with the fresh note; prior entries remain in the CRM activity timeline; no timestamp is added). <strong>Qualification Status is never changed.</strong> Owner, source, contact details, lead name, and lead ID remain untouched. Nothing is saved until you confirm.</div>
           <button id="saveUpdate" class="btn btn-primary full" type="submit" disabled>Review &amp; save existing lead</button><div id="updateMessage" class="message">No CRM changes until you confirm.</div>
         </div>
       </form>
