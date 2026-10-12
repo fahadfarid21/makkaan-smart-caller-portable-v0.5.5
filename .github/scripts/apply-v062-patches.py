@@ -38,6 +38,8 @@ replace_once(
 )
 
 new_save = """    const baselineActivities = new Set((before.recentActivities || []).map(a => String(a.text || '').trim()));
+    const toastSelector = '.alert, .toast, .msgprint, [role="alert"]';
+    const baselineToasts = new Set([...document.querySelectorAll(toastSelector)].filter(isVisible).map(el => (el.innerText || '').trim().toLowerCase()).filter(Boolean));
     saveButton.click();
     // Verify using a specific save toast and stable read-back, not any occurrence of the word "saved" on the page.
     let sawSaveSignal = false;
@@ -46,10 +48,11 @@ new_save = """    const baselineActivities = new Set((before.recentActivities ||
     let newTimelineNote = false;
     for (let i = 0; i < 24; i++) {
       await wait(500);
-      const toast = [...document.querySelectorAll('.alert, .toast, .msgprint, [role="alert"]')]
-        .filter(isVisible).map(el => (el.innerText || '').trim()).join(' ').toLowerCase();
+      const toastEntries = [...document.querySelectorAll(toastSelector)].filter(isVisible).map(el => (el.innerText || '').trim().toLowerCase()).filter(Boolean);
       const busy = [...document.querySelectorAll('button.btn-primary')].some(b => isVisible(b) && (b.disabled || /saving/i.test(b.innerText || '')));
-      const successToast = /saved successfully|changes saved|document saved|updated successfully|successfully updated|record updated|^saved$|^updated$/i.test(toast) && !/failed|error|could not|unable|not saved|invalid/i.test(toast);
+      const successToast = toastEntries.some(toast => !baselineToasts.has(toast) &&
+        /saved successfully|changes saved|document saved|updated successfully|successfully updated|record updated|^saved$|^updated$/i.test(toast) &&
+        !/failed|error|could not|unable|not saved|invalid/i.test(toast));
       if (successToast && !busy) sawSaveSignal = true;
       try { latest = getLeadInfo(); } catch (_) { latest = null; }
       if (!latest || latest.id !== before.id) { stableMatches = 0; continue; }
