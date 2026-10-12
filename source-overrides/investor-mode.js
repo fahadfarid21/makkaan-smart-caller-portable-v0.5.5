@@ -136,8 +136,15 @@ function mountQuickInvestorCalculator(){
     '<div class="qi-actions"><button id="qiCopy" class="qi-copy" type="button">Copy investor summary</button><span id="qiStatus" class="qi-status" role="status">Live estimates · verify approved terms.</span></div>',
     '<p class="qi-foot">Presentation controls remain editable. These are arithmetic estimates only; confirm the exact unit, approved price, written payment terms and charges before quoting. Detailed rental and future-value scenarios remain available below.</p>'
   ].join('');
-  const header=root.querySelector(':scope > .investor-header,:scope > .modal-header,:scope > .im-header,:scope > header,:scope > .topbar');
-  if(header)header.insertAdjacentElement('afterend',quick);else root.insertBefore(quick,root.firstElementChild);
+  /* Keep the compact calculator above the two-column editor/presentation layout.
+     In this app, .layout is a CSS grid; inserting the card inside it would squeeze
+     the calculator into the left column and push the presentation down. */
+  const layout=document.querySelector('.layout');
+  if(layout){layout.insertAdjacentElement('beforebegin',quick);}
+  else {
+    const header=root.querySelector(':scope > .investor-header,:scope > .modal-header,:scope > .im-header,:scope > header,:scope > .topbar');
+    if(header)header.insertAdjacentElement('afterend',quick);else root.insertBefore(quick,root.firstElementChild);
+  }
 
   function pushValue(source,mirror){const original=$(source),input=$(mirror);if(!original||!input)return;original.value=input.value;original.dispatchEvent(new Event('input',{bubbles:true}));}
   function quickSync(){
