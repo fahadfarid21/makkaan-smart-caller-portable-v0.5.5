@@ -32,7 +32,7 @@ jobs:
           with zipfile.ZipFile(archive) as zf:
               for item in zf.infolist():
                   # The original Windows-created ZIP stores backslashes as separators.
-                  name = item.filename.replace('\\\\', '/')
+                  name = item.filename.replace('\\', '/')
                   target = (root / name).resolve()
                   if root.resolve() not in target.parents and target != root.resolve():
                       raise SystemExit(f'Unsafe archive path: {item.filename!r}')
