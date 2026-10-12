@@ -1,0 +1,16 @@
+MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.0 — VALIDATION SCOPE
+
+Automated workflow checks:
+- JSON parse of the packaged manifest.
+- Required manifest entry-point existence.
+- Node syntax check for JavaScript files.
+- ZIP packaging and required-file checks.
+
+Not claimed by these checks:
+- Browser launch or visual rendering in Chrome/Brave.
+- Successful live Prop-360 CRM interaction or save verification.
+- Accuracy of current market data, rent, CPI, savings rates, availability or project terms.
+- Correctness of user-entered KPI counts or target basis.
+- Guarantee of finding every possible secret or privacy issue.
+
+Complete MANUAL-TEST-CHECKLIST.txt before production use.
