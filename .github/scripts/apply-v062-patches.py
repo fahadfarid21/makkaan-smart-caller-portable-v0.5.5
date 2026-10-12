@@ -57,10 +57,14 @@ new_save = """    const baselineActivities = new Set((before.recentActivities ||
       const fieldsMatch = current.status === changed.status &&
         current.activityType === changed.activityType && current.quality === changed.quality &&
         normalized(current.nextDate) === normalized(changed.nextDate);
-      const noteTail = note.length > 100 ? note.slice(-100) : note;
+      const expectedSnapshot = note.length > 360 ? '…' + note.slice(-359) : note;
       newTimelineNote = !!note && (latest.recentActivities || []).some(a => {
         const entry = String(a.text || '').trim();
-        return !baselineActivities.has(entry) && (entry.includes(note) || (noteTail.length >= 40 && entry.includes(noteTail)));
+        if (baselineActivities.has(entry)) return false;
+        const marker = entry.match(/Comments snapshot:\\s*/i);
+        if (!marker) return false;
+        const snapshot = entry.slice(marker.index + marker[0].length).trim();
+        return snapshot === expectedSnapshot;
       });
       // Prefer exact form read-back. A newly created Lead Update snapshot is valid evidence
       // only if it is new and contains this fresh note.
