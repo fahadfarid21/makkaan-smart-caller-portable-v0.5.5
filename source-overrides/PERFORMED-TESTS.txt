@@ -1,16 +1,21 @@
-MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.0 — VALIDATION SCOPE
+MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.2 — AUTOMATED VALIDATION SCOPE
 
-Automated workflow checks:
-- JSON parse of the packaged manifest.
-- Required manifest entry-point existence.
-- Node syntax check for JavaScript files.
-- ZIP packaging and required-file checks.
+Automated GitHub Actions checks for the release:
+- Manifest JSON parses and reports version 0.6.2.
+- Required manifest entry points exist in the packaged extension.
+- JavaScript syntax checks pass for all packaged top-level JavaScript files.
+- Fresh-comment patch invariants pass: CRM Comments is replaced with only the new note; old Comments are not appended and no timestamp is added by the extension.
+- The Gemini brief prompt contains the lead-specific output sections.
+- Follow-up planner contains no global chrome.runtime.sendMessage interception and includes KPI completion integration.
+- Required files exist, the portable ZIP is created, and ZIP integrity is checked.
+- SHA-256 checksum is generated for the actual v0.6.2 ZIP.
 
 Not claimed by these checks:
 - Browser launch or visual rendering in Chrome/Brave.
-- Successful live Prop-360 CRM interaction or save verification.
-- Accuracy of current market data, rent, CPI, savings rates, availability or project terms.
+- Successful live Prop-360 CRM interaction or save verification on a real account.
+- Live Gemini API success with the user's key/quota.
 - Correctness of user-entered KPI counts or target basis.
+- Accuracy of current market data, rent, CPI, savings rates, availability or project terms.
 - Guarantee of finding every possible secret or privacy issue.
 
-Complete MANUAL-TEST-CHECKLIST.txt before production use.
+Complete MANUAL-TEST-CHECKLIST.txt before production use. Initial CRM write tests must use an authorized test record.
