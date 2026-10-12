@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - feat/smart-caller-v0.6.0-daily-kpi-coach
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
