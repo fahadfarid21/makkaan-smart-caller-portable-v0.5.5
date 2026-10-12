@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Makkaan Sales Sidecar</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brandline"><span class="brandmark"><span></span></span><span>MAKKAAN</span><span class="brandsep">/</span><span>SALES SIDECAR</span><span class="version">0.6.0</span></div>
+    <div class="headrow">
+      <div><p class="eyebrow">YOUR DAILY SALES DESK</p><h1>Call smarter.</h1><p class="sub">Less admin. Better conversations.</p></div>
+      <button id="settingsBtn" class="iconbtn" title="AI settings" aria-label="AI settings">âš™</button>
+    </div>
+  </header>
+  <nav class="agentnav" aria-label="Sales Sidecar tools">
+    <button class="navbtn active" data-view="desk">Desk</button>
+    <button class="navbtn" data-view="queue">Queue</button>
+    <button class="navbtn" data-view="calculator">Calc</button>
+    <button class="navbtn" data-view="brief">Brief</button>
+    <button class="navbtn" data-view="update">Update</button>
+    <button class="navbtn" data-view="notes">AI Notes</button>
+    <button class="navbtn" data-view="guide">Guide</button>
+  </nav>
+<div id="investor-mode-shortcut" style="margin:10px 0 12px;padding:11px 12px;border:1px solid #dbe6e1;border-radius:12px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:0 3px 12px rgba(23,45,60,.04);">
+  <div style="min-width:0;"><div style="font-size:10px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;color:#236a57;">Investor Mode</div><div style="font-size:10px;line-height:1.35;color:#667987;margin-top:3px;">Client-ready Avenue 18 investment presentation</div></div>
+  <button type="button" id="investorModeLaunch" style="flex:0 0 auto;border:1px solid #236a57;border-radius:8px;background:#236a57;color:#ffffff;padding:8px 10px;font-size:10px;font-weight:850;cursor:pointer;">Open â†—</button>
+</div>
+
+  <main>
+    <section id="view-desk" class="view active">
+      <div class="panel current-panel">
+        <div class="sectionrow"><span class="sectionlabel">CURRENT CRM LEAD</span><span id="leadConnectionPill" class="statuspill neutral">Checking</span></div>
+        <div id="activeLeadId" class="leadid">Checking active tabâ€¦</div>
+        <div id="activeLeadTitle" class="muted small"></div>
+        <div class="row gap8"><button id="refreshLead" class="btn btn-secondary grow">Refresh lead</button><button id="goUpdate" class="btn btn-primary">Quick update</button></div>
+        <div id="leadMessage" class="message">Open an existing Makkaan lead detail page.</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi"><span>Connected today</span><strong id="connectedCount">0 / 40</strong><div class="progress"><span id="progressBar"></span></div><small id="remainingText">40 remaining</small></div>
+        <div class="kpi"><span>Call attempts</span><strong id="attemptCount">0</strong><small id="connectionRate">Connection rate: â€”</small></div>
+      </div>
+      <div class="panel slim">
+        <div class="row between"><label for="dailyTarget">Daily connected target</label><input id="dailyTarget" class="targetinput" type="number" min="1" max="300" value="40"></div>
+        <p class="hint">Only confirmed call updates in this Sidecar count. Calls recorded elsewhere are not synced automatically.</p>
+      </div>
+      <div class="panel">
+        <div class="row between"><div><h2>Next up</h2><p class="sub">Rule-based suggestions from your imported snapshot</p></div><button class="textbtn" id="toQueue">Queue â†’</button></div>
+        <div id="nextLeads" class="lead-list"><div class="empty">Import your Leads_Master CSV in Queue.</div></div>
+      </div>
+      <div class="panel slim">
+        <div class="row between"><h2>Today</h2><span id="todayDate" class="pill"></span></div>
+        <div id="recentCalls" class="recent-list"><div class="empty">No confirmed call updates logged today.</div></div>
+      </div>
+    </section>
+
+    <section id="view-queue" class="view">
+      <div class="panel">
+        <div class="sectionrow"><span class="sectionlabel">LEAD FINDER</span><span class="statuspill neutral">Local snapshot</span></div>
+        <h2>Call queue</h2><p class="sub">Import your approved Leads_Master CSV. No live CRM sync.</p>
+        <label class="filelabel" for="csvFile">Choose Leads_Master CSV</label><input id="csvFile" type="file" accept=".csv,text/csv">
+        <div id="importStatus" class="message">No roster imported yet.</div><div id="rosterMeta" class="small muted"></div>
+      </div>
+      <div class="panel slim">
+        <label for="queueSearch">Find a lead</label><input id="queueSearch" type="search" placeholder="Name, lead ID, or phone">
+        <div class="filtergrid">
+          <div><label for="qualityFilter">Lead quality</label><select id="qualityFilter"><option value="all">All</option><option>Favorite</option><option>very Hot</option><option>Hot</option><option>Average</option><option>Cold</option></select></div>
+          <div><label for="followFilter">Follow-up</label><select id="followFilter"><option value="all">All eligible</option><option value="overdue">Overdue</option><option value="today">Due today</option><option value="future">Future</option><option value="no-date">No date</option></select></div>
+        </div>
+        <p class="hint">Old snapshot dates must be checked in the live CRM. Scores are sorting hintsâ€”not conversion predictions.</p>
+      </div>
+      <div class="row between queueheading"><h2 id="queueCount">Call queue</h2><button id="clearRoster" class="textbtn dangertext">Clear roster</button></div>
+      <div id="queueList" class="lead-list"><div class="empty">Import the roster CSV to see leads.</div></div>
+      <div class="stickybottom actionstack"><button id="briefSelected" class="btn btn-secondary full" disabled>Prepare pre-call brief</button><button id="openSelected" class="btn btn-primary full" disabled>Open selected lead in CRM</button></div>
+    </section>
+
+    <section id="view-calculator" class="view">
+      <div class="panel calc-hero">
+        <div class="sectionrow"><span class="sectionlabel">QUICK PRICE DESK</span><span class="statuspill accent">Editable</span></div>
+        <h2>Get the price in seconds.</h2>
+        <p class="sub">Change the area and approved rate. The total updates instantly.</p>
+        <div class="calc-preset-row">
+          <div class="grow"><label for="calcPreset">Avenue 18 rate preset</label><select id="calcPreset">
+            <option value="custom" selected>Manual rate</option>
+            <option value="lowerground">Lower Ground shop Â· Rs 65,000 training anchor</option>
+            <option value="ground">Ground shop Â· Rs 100,000 training anchor</option>
+            <option value="first">First Floor shop Â· Rs 70,000 training anchor</option>
+            <option value="fourth">Fourth Floor office Â· Rs 35,000 training anchor</option>
+            <option value="fifth">Fifth Floor office Â· Rs 35,000 training anchor</option>
+          </select></div>
+          <button id="calcReset" class="btn btn-ghost calc-reset" type="button">Reset</button>
+        </div>
+        <div class="fieldgrid calc-input-grid">
+          <div><label for="calcArea">Area (sq ft)</label><input id="calcArea" type="number" min="1" step="1" inputmode="decimal" value="200"></div>
+          <div><label for="calcRate">Rate (PKR / sq ft)</label><input id="calcRate" type="number" min="1" step="100" inputmode="decimal" value="65000"></div>
+        </div>
+        <div class="calc-total" aria-live="polite">
+          <span class="calc-kicker">ESTIMATED TOTAL PRICE</span>
+          <strong id="calcTotal">PKR 13,000,000</strong>
+          <span id="calcTotalCompact" class="calc-compact">1 crore 30 lakh</span>
+          <span id="calcFormula" class="calc-formula">200 sq ft Ã— PKR 65,000</span>
+        </div>
+        <button id="calcCopyPrice" class="btn btn-secondary full" type="button">Copy price summary</button>
+      </div>
+
+      <div class="panel">
+        <div class="sectionrow"><h2>Payment plan calculator</h2><span class="small muted">Edit every field</span></div>
+        <p class="sub">Template: 25% down payment + 65% installments + 10% possession over 36 months.</p>
+        <div class="fieldgrid calc-percent-grid">
+          <div><label for="calcDpPct">Down payment (%)</label><input id="calcDpPct" type="number" min="0" max="100" step="0.5" value="25" inputmode="decimal"></div>
+          <div><label for="calcInstallmentPct">Installments (%)</label><input id="calcInstallmentPct" type="number" min="0" max="100" step="0.5" value="65" inputmode="decimal"></div>
+          <div><label for="calcPossessionPct">Possession (%)</label><input id="calcPossessionPct" type="number" min="0" max="100" step="0.5" value="10" inputmode="decimal"></div>
+          <div><label for="calcMonths">Duration (months)</label><input id="calcMonths" type="number" min="1" max="600" step="1" value="36" inputmode="numeric"></div>
+        </div>
+        <div id="calcPlanStatus" class="message good" role="status" aria-live="polite">Payment percentages total 100%.</div>
+        <div class="calc-results">
+          <div class="calc-result"><span>Down payment</span><strong id="calcDpAmount">PKR 3,250,000</strong><small id="calcDpCompact">25% of total</small></div>
+          <div class="calc-result"><span>Installment pool</span><strong id="calcInstallmentAmount">PKR 8,450,000</strong><small id="calcInstallmentCompact">65% of total</small></div>
+          <div class="calc-result calc-result-primary"><span>Monthly installment</span><strong id="calcMonthlyAmount">PKR 234,722</strong><small id="calcMonthsLabel">Over 36 months Â· estimate</small></div>
+          <div class="calc-result"><span>Quarterly equivalent</span><strong id="calcQuarterlyAmount">PKR 704,167</strong><small>Installment pool spread over 3-month periods</small></div>
+          <div class="calc-result"><span>Possession amount</span><strong id="calcPossessionAmount">PKR 1,300,000</strong><small id="calcPossessionCompact">10% of total</small></div>
+          <div class="calc-result"><span>Remaining / excess</span><strong id="calcBalanceAmount">PKR 0</strong><small id="calcBalanceLabel">Percentages balance exactly</small></div>
+        </div>
+        <button id="calcCopyBreakdown" class="btn btn-primary full" type="button">Copy full calculation</button>
+        <p class="hint">These are arithmetic estimates, not an official offer or payment demand. Confirm written terms, fees, taxes, and unit availability before sharing with a client.</p>
+      </div>
+
+      <details class="calc-advanced">
+        <summary>More quick tools Â· budget and reverse rate</summary>
+        <div class="calc-tool">
+          <h2>What area fits this budget?</h2>
+          <p class="sub">Budget Ã· rate gives an approximate maximum whole-square-foot area.</p>
+          <div class="fieldgrid">
+            <div><label for="calcBudget">Total budget (PKR)</label><input id="calcBudget" type="number" min="0" step="50000" value="15000000" inputmode="decimal"></div>
+            <div><label for="calcBudgetRate">Rate (PKR / sq ft)</label><input id="calcBudgetRate" type="number" min="1" step="100" value="65000" inputmode="decimal"></div>
+          </div>
+          <div class="calc-mini-result"><span>Approx. area within budget</span><strong id="calcBudgetArea">230 sq ft</strong></div>
+        </div>
+        <div class="calc-tool calc-tool-last">
+          <h2>Reverse rate calculator</h2>
+          <p class="sub">Enter a quoted total and area to calculate the effective rate per sq ft.</p>
+          <div class="fieldgrid">
+            <div><label for="calcReverseTotal">Total price (PKR)</label><input id="calcReverseTotal" type="number" min="0" step="50000" value="17850000" inputmode="decimal"></div>
+            <div><label for="calcReverseArea">Area (sq ft)</label><input id="calcReverseArea" type="number" min="1" step="1" value="510" inputmode="decimal"></div>
+          </div>
+          <div class="calc-mini-result"><span>Effective rate</span><strong id="calcReverseRate">PKR 35,000 / sq ft</strong></div>
+        </div>
+      </details>
+      <div class="calc-warning"><strong>Before quoting:</strong> presets are historical training anchors only, not live inventory or a promise of availability. Verify the latest approved rate, size, discounts/charges, payment terms, and unit status in Makkaan materials.</div>
+    </section>
+
+    <section id="view-brief" class="view">
+      <div class="panel">
+        <div class="sectionrow"><span class="sectionlabel">PRE-CALL INTELLIGENCE</span><span class="statuspill accent">Avenue 18</span></div>
+        <h2>Walk into the call prepared.</h2><p class="sub">A respectful Pakistani real-estate approach: informed, consultative, never pushy.</p>
+        <div id="briefLeadId" class="leadid">No existing lead detected</div><div id="briefLeadTitle" class="muted small"></div>
+        <button id="refreshBriefLead" class="btn btn-secondary full">Reload lead + context</button>
+      </div>
+      <div class="panel">
+        <div class="sectionrow"><h2>Project context</h2><span class="small muted">Edit as needed</span></div>
+        <textarea id="projectContext" rows="4" maxlength="2200">Avenue 18 is the project context for this real-estate conversation. Use only project facts that have been approved and verified from current official materials. Do not invent location advantages, approvals, inventory, unit sizes, prices, payment plans, possession dates, rental yields, capital appreciation, guarantees, or scarcity claims. Confirm the relevant unit and current terms before quoting.</textarea>
+        <p class="hint">Add confirmed location, unit options, current pricing/payment plan, and approved differentiators here. Stored locally in this browser profile.</p>
+        <button id="saveProjectContext" class="btn btn-secondary full">Save project context</button>
+      </div>
+      <div class="panel">
+        <div class="row between"><h2>Lead context</h2><span class="small muted">Review before AI</span></div>
+        <p class="hint">The extension does not auto-add the lead ID/title or phone/email form fields, and it redacts common lead-ID, email, and Pakistani-mobile patterns in imported context. Comments may still identify a person; review and manually redact the context below before external AI.</p>
+        <textarea id="briefContext" rows="7" maxlength="6500" placeholder="Refresh an existing Makkaan lead to load status, quality, follow-up date, comments, and recent activity snippets."></textarea>
+        <div class="privacy">External AI only: the context below and project context are sent if you tick the authorization box and click Generate AI brief. Use this only if Makkaan approves the service for that information.</div>
+        <label class="consent"><input type="checkbox" id="briefConsent"><span>I am authorized to send this reviewed context to the configured AI service.</span></label>
+        <div class="actionstack"><button id="offlineBrief" class="btn btn-secondary full">Build quick brief offline</button><button id="generateBrief" class="btn btn-primary full">âœ¦ Generate AI pre-call brief</button></div>
+        <div id="briefStatus" class="message">Refresh a lead to prepare the brief. Offline brief works without AI.</div>
+      </div>
+      <div class="panel">
+        <div class="sectionrow"><h2>Your call brief</h2><button id="copyBrief" class="textbtn" disabled>Copy</button></div>
+        <pre id="briefOutput" class="briefoutput">Your short call plan will appear here.</pre>
+        <button id="briefToUpdate" class="btn btn-secondary full" disabled>Open Call Update</button>
+        <p class="hint">AI suggestions are drafts. Verify facts and choose your own words before speaking or saving notes.</p>
+      </div>
+    </section>
+
+    <section id="view-update" class="view">
+      <div class="panel current-panel">
+        <div class="sectionrow"><span class="sectionlabel">EXISTING LEAD ONLY</span><span id="updateStatusPill" class="statuspill neutral">Not ready</span></div>
+        <h2>Quick CRM update</h2><div id="updateLeadId" class="leadid">No existing lead detected</div><div id="updateLeadTitle" class="muted small"></div>
+        <button id="refreshUpdateLead" class="btn btn-secondary full">Refresh active lead</button>
+      </div>
+      <form id="updateForm">
+        <div class="panel">
+          <label for="mode">Update type</label><select id="mode"><option value="call">Call result â€” update Status</option><option value="note">Quick Note â€” leave Status unchanged</option></select>
+          <div class="fieldgrid"><div><label for="quality">Lead quality</label><select id="quality"><option value="__KEEP__">Keep existing</option><option>Cold</option><option>Average</option><option>Hot</option><option>very Hot</option><option>Favorite</option></select></div><div><label for="status">Actual call outcome</label><select id="status"><option value="">Choose resultâ€¦</option><option>Connected</option><option>Not Connected</option></select></div></div>
+          <p id="statusHint" class="hint">Choose the actual outcome of a real call.</p>
+          <label for="nextDate">Next activity date <span class="muted">(blank = unchanged)</span></label><input id="nextDate" type="date">
+          <label for="comment">Rough notes / comments</label><textarea id="comment" rows="4" maxlength="1500" placeholder="Short facts: what happened, what the prospect asked, agreed next stepâ€¦"></textarea>
+          <div class="row gap8"><button id="refineInline" class="btn btn-secondary grow" type="button">âœ¦ Refine note</button><button id="openNotes" class="btn btn-ghost" type="button">AI Notes</button></div>
+          <div class="scope"><strong>Only five fields are in scope:</strong> Lead Quality (if changed), Status (call mode only), Activity Type = Call, Next Activity Date (if entered), and Comments (append only). Owner, source, contact details, qualification status and lead ID are untouched.</div>
+          <button id="saveUpdate" class="btn btn-primary full" type="submit" disabled>Review &amp; save existing lead</button><div id="updateMessage" class="message">No CRM changes until you confirm.</div>
+        </div>
+      </form>
+    </section>
+
+    <section id="view-notes" class="view">
+      <div class="panel">
+        <div class="sectionrow"><span class="sectionlabel">AI NOTE AGENT</span><span class="statuspill accent">Draft only</span></div>
+        <h2>Rough notes â†’ clean comment</h2><p class="sub">Write shorthand during or after the call. Review every draft before saving.</p>
+        <label for="roughNote">Your rough note</label><textarea id="roughNote" rows="4" maxlength="1500" placeholder="e.g. client busy, asks for office unit info, callback Friday afternoon"></textarea>
+        <label class="consent"><input type="checkbox" id="aiConsent"><span>I'm authorized to send this text to the configured external AI service.</span></label>
+        <p class="privacy">Only text typed here is sent for note refinement. Do not include names, phone numbers, or confidential details unless Makkaan approves.</p>
+        <button id="refineNote" class="btn btn-primary full">âœ¦ Refine rough note</button><div id="aiStatus" class="message">Configure AI in Settings. Fake notes are safest for testing.</div>
+        <label for="refinedNote">Refined draft â€” review it</label><textarea id="refinedNote" rows="4" maxlength="1500" placeholder="AI draft appears here. Nothing is saved automatically."></textarea>
+        <button id="useRefined" class="btn btn-secondary full" disabled>Use draft in Call Update</button><button id="settingsFromNotes" class="textbtn full">AI settings â†’</button>
+      </div>
+    </section>
+
+    <section id="view-guide" class="view">
+      <div class="panel guidehero"><div class="sectionlabel">FIELD GUIDE Â· VERSION 0.4.4</div><h2>Your sales routine, simplified.</h2><p class="sub">A quick operating guide for back-to-back calls and Avenue 18 conversations.</p></div>
+      <details open class="guidecard"><summary>01 Â· Start your day</summary><ol><li>Open Makkaan and the Sidecar panel in the same browser window.</li><li>Use <b>Calc</b> for editable price, down payment, monthly/quarterly installment and budget math; confirm current approved terms before quoting.</li><li>Import the approved <b>Leads_Master CSV</b> when the roster needs refresh.</li><li>Choose a lead in Queue, then open its existing CRM record.</li><li>Use Brief to review actual history before calling. Snapshot dates are reminders to verifyâ€”not live task truth.</li></ol></details>
+      <details class="guidecard"><summary>02 Â· Professional Desi real-estate call</summary><div class="scriptblock"><b>Opening</b><p>â€œAssalam-o-Alaikum / Hello, [Name] sahab. Fahad here from Makkaan. Is this a convenient time for a quick 30-second conversation?â€</p><b>Purpose</b><p>â€œI wanted to understand what you're looking for firstâ€”commercial space for your own business, or an investment option?â€</p><b>Discovery</b><p>â€œWhat size or type of unit would suit you? What's your preferred timeline and payment comfort? Would it help if I shared the relevant verified details for Avenue 18?â€</p><b>Next step</b><p>â€œBased on what you've told me, I'll confirm the current options and send only the information relevant to you. Would a short follow-up at [agreed time] work?â€</p></div><p class="hint">Adapt the greeting and wording naturally. Never invent returns, approval status, availability, pricing, or urgency.</p></details>
+      <details class="guidecard"><summary>03 Â· Build a useful pre-call brief</summary><ol><li>Open an existing lead and select Brief.</li><li>Review the lead context; remove any identifying details before using external AI.</li><li>Save your approved Avenue 18 facts in Project Context.</li><li>Use Offline Brief for a local summary, or authorize and Generate AI Brief if company policy permits.</li><li>Use suggestions as promptsâ€”not as verified project facts.</li></ol></details>
+      <details class="guidecard"><summary>04 Â· Record the outcome correctly</summary><ul><li><b>Call result:</b> choose Connected or Not Connected based on the real call and log concise factual notes.</li><li><b>Quick Note:</b> append a genuine reminder or message note while leaving Status unchanged. Activity Type remains Call by design.</li><li>Enter a next activity date only when appropriate; blank means leave unchanged.</li><li>Review all five in-scope fields, confirm Save, and verify the CRM record.</li></ul></details>
+      <details class="guidecard"><summary>05 Â· What the Sidecar won't do</summary><ul><li>It does not create CRM leads, auto-dial, or change ownership, source, contact details, qualification status, or lead ID.</li><li>The roster and call tracker are local snapshots/logs; they do not sync automatically to Google Sheets or all CRM reports.</li><li>Call count is not proof of a telephone system event; it counts only updates this extension marks as verified.</li><li>Ambiguous saves must be checked manually before retrying.</li></ul></details>
+      <div class="panel slim"><h2>Quick actions</h2><div class="guideactions"><button id="guideToQueue" class="btn btn-secondary">Open Queue</button><button id="guideToBrief" class="btn btn-secondary">Pre-call Brief</button><button id="guideToUpdate" class="btn btn-primary">Call Update</button></div></div>
+    </section>
+  </main>
+  <footer><span class="brandfoot">MAKKAAN <span>Â·</span> SALES SIDECAR</span><br>Local-first helper Â· No auto-dialing Â· Confirm every CRM write.</footer>
+  <script src="calculator.js"></script>
+  <script src="sidepanel.js"></script>
+  <script src="daily-kpi-coach.js"></script>
+  <script src="investor-launcher.js"></script>
+  <script src="sidecar-shell-polish.js"></script>
+  <script src="chatgpt-bridge.js"></script>
+</body>
+</html>
