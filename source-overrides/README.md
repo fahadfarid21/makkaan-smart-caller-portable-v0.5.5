@@ -1,6 +1,9 @@
-# Makkaan Smart Caller Complete Portable v0.6.3
+# Makkaan Smart Caller Complete Portable v0.6.4
 
 A portable Chromium extension combining the Makkaan Sales Sidecar, Investor Mode, local lead queue, calculator, pre-call briefs, guided CRM updates and a daily execution coach.
+
+## What's new in 0.6.4
+- Fixes Quick Investor Calculator placement so it spans the full width above the two-column presentation/editor layout rather than occupying a narrow grid cell.
 
 ## What's new in 0.6.3
 - New Quick Investor Calculator: enter unit type, area, approved rate and plan duration; total value, down payment, monthly installment and possession/transfer milestone calculate live. Supports office quantity and copies a concise client-ready summary.
