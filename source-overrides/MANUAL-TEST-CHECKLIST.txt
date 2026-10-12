@@ -1,0 +1,37 @@
+MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.0 — MANUAL TEST CHECKLIST
+
+STATIC BUILD CHECKS (automated in GitHub Actions)
+[ ] manifest.json parses as JSON and reports version 0.6.0.
+[ ] All local manifest entry points exist.
+[ ] Node syntax checks pass for all JavaScript files.
+[ ] Package ZIP builds successfully and includes the required files.
+
+INSTALLATION
+[ ] Load unpacked in Chrome without manifest errors.
+[ ] Load unpacked in Brave without manifest errors.
+[ ] Side panel opens; Desk, Queue, Calc, Brief, Update, AI Notes and Guide work.
+[ ] Investor Mode opens and saves its editable assumptions after reload.
+
+DAILY KPI COACH
+[ ] KPI panel appears on Desk.
+[ ] Verified CRM call outcome appears after a confirmed native CRM save.
+[ ] Follow-up, meeting, CRM lead and opportunity buttons increment their counters.
+[ ] Daily counters roll over on the next local date; monthly meetings/value remain in the month.
+[ ] Changing targets and monthly progress persists after closing/reopening the side panel.
+[ ] Values remain local; no client identifiers are displayed in the KPI panel.
+[ ] Check narrow side panel layout and keyboard accessibility.
+
+CALCULATOR / INVESTOR MODE
+[ ] 500 sq ft × PKR 75,000 = PKR 37,500,000; 25% down = PKR 9,375,000.
+[ ] Retail area/rate, payment allocations, rent scenarios and 1/3/5-year projections recalculate.
+[ ] Office multi-unit totals, payment schedule, rental scenarios, copy and print work.
+[ ] All assumptions are labeled illustrative and current rates/availability are verified before quoting.
+
+CRM TESTING — AUTHORIZED TEST RECORD ONLY
+[ ] Detect a test lead and read the timeline.
+[ ] Preview exact proposed fields and comment before saving.
+[ ] Confirm native CRM save and inspect the resulting record.
+[ ] Confirm no auto-dialing or unsupervised CRM write occurs.
+[ ] Inspect browser console/service worker errors.
+
+Do not use a real client record for initial write tests. Static checks do not replace live browser testing.
