@@ -1,6 +1,11 @@
-# Makkaan Smart Caller Complete Portable v0.6.0
+# Makkaan Smart Caller Complete Portable v0.6.1
 
 A portable Chromium extension combining the Makkaan Sales Sidecar, Investor Mode, local lead queue, calculator, pre-call briefs, guided CRM updates and a daily execution coach.
+
+## What's new in 0.6.1
+- Fresh-note workflow: focusing the Comments box clears the prefilled historical text; old entries remain in the CRM activity timeline. The save-message guard replaces comment fields with only the fresh note and does not add a timestamp in the extension note.
+- Follow-up command center with date, channel, priority, exact next action, optional CRM reference, overdue/due/upcoming sorting, and mark-complete/remove actions. Reminders are local and do not create CRM tasks.
+- Update form remains human-confirmed and Qualification Status remains out of scope.
 
 ## What's new in 0.6.0
 - Daily KPI coach for verified CRM call outcomes, follow-ups, meetings booked, leads added and qualified opportunities.
@@ -18,10 +23,11 @@ A portable Chromium extension combining the Makkaan Sales Sidecar, Investor Mode
 
 ## Daily routine
 1. Import your approved lead CSV into Queue.
-2. Work the lead list and record the real call outcome in the CRM through the guided update flow.
-3. Use the KPI coach to log a follow-up, meeting, CRM lead addition or qualified opportunity only after it actually happens.
-4. Keep the monthly target measure consistent with the KPI definition used by your manager.
-5. Use Investor Mode for client presentations, but verify current approved unit rates, availability, payment terms, rental evidence and assumptions before quoting.
+2. Work the lead list and record the real call outcome in the CRM through the guided update flow. Put only the fresh note in the Comments box; the prior history is already in CRM activities.
+3. After every meaningful conversation, add a follow-up reminder with a date, channel, priority and concrete next action. Mark it completed only after the action is done.
+4. Use the KPI coach to log a follow-up, meeting, CRM lead addition or qualified opportunity only after it actually happens.
+5. Keep the monthly target measure consistent with the KPI definition used by your manager.
+6. Use Investor Mode for client presentations, but verify current approved unit rates, availability, payment terms, rental evidence and assumptions before quoting.
 
 ## Privacy and safety
 - No auto-dialing or unsupervised CRM writes.
