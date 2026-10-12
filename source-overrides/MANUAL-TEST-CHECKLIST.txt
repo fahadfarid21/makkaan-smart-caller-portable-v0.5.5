@@ -11,6 +11,8 @@ INSTALLATION
 [ ] Load unpacked in Brave without manifest errors.
 [ ] Side panel opens; Desk, Queue, Calc, Brief, Update, AI Notes and Guide work.
 [ ] Investor Mode opens and saves its editable assumptions after reload.
+[ ] Retail and office default installment periods are 30 months (2.5 years); editing months updates the monthly estimate correctly.
+[ ] Side panel top tabs have readable white text on dark green; selected tab has dark text on white; keyboard focus is visible.
 
 FRESH COMMENT + FOLLOW-UP WORKFLOW
 [ ] Open an existing lead directly in Prop 360 and verify the same record is detected in Sidecar.
