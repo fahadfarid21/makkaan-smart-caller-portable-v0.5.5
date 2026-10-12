@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Makkaan Sales Sidecar",
-  "version": "0.6.0",
-  "description": "Local-first Makkaan sales desk with lead queue, pre-call briefs, editable calculator, guided human-confirmed CRM updates, Investor Mode, and a daily KPI coach. AI note refinement requires user configuration. No auto-dialing or unsupervised CRM writes.",
+  "version": "0.6.1",
+  "description": "Local-first Makkaan sales desk with lead queue, calculator, pre-call briefs, fresh-note CRM updates, structured follow-up reminders, daily KPI coach, and human-confirmed CRM writes. No auto-dialing or unsupervised CRM writes.",
   "permissions": [
     "activeTab",
     "storage",
