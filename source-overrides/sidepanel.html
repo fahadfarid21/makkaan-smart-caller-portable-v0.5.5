@@ -25,6 +25,16 @@
     body header.topbar .brandsep { color:#c7f0d8 !important; }
     body header.topbar .version { background:#032f20 !important; border:1px solid #bde8cf !important; min-width:48px; text-align:center; padding:3px 8px; font-size:10px !important; letter-spacing:.04em !important; }
     body header.topbar .iconbtn { background:#ffffff !important; color:#043b29 !important; border:2px solid #bde8cf !important; font-weight:900 !important; box-shadow:0 2px 8px rgba(0,0,0,.24) !important; min-width:42px; min-height:42px; }
+  
+    /* v0.6.2 tab contrast lock: keep every top-level navigation label readable even if later styles load. */
+    body nav.agentnav, body .agentnav { background:#043b29 !important; color:#ffffff !important; }
+    body nav.agentnav .navbtn, body .agentnav .navbtn,
+    body nav.agentnav button, body .agentnav button { color:#f4fff8 !important; background:transparent !important; border:1px solid rgba(255,255,255,.38) !important; font-weight:800 !important; opacity:1 !important; text-shadow:none !important; }
+    body nav.agentnav .navbtn.active, body .agentnav .navbtn.active,
+    body nav.agentnav button.active, body .agentnav button.active { color:#063b29 !important; background:#ffffff !important; border-color:#ffffff !important; }
+    body nav.agentnav .navbtn:hover, body .agentnav .navbtn:hover { color:#063b29 !important; background:#d8f5e5 !important; }
+    body nav.agentnav .navbtn:focus-visible, body .agentnav .navbtn:focus-visible { outline:3px solid #ffd166 !important; outline-offset:2px !important; }
+    body .topbar h1, body .topbar .brandline, body .topbar .sub, body .topbar .eyebrow, body .topbar .version { color:#ffffff !important; opacity:1 !important; }
   </style>
 </head>
 <body>
