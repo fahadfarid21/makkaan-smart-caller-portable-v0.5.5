@@ -1,7 +1,7 @@
 MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.2 — MANUAL TEST CHECKLIST
 
 STATIC BUILD CHECKS (automated in GitHub Actions)
-[ ] manifest.json parses as JSON and reports version 0.6.0.
+[ ] manifest.json parses as JSON and reports version 0.6.2.
 [ ] All local manifest entry points exist.
 [ ] Node syntax checks pass for all JavaScript files.
 [ ] Package ZIP builds successfully and includes the required files.
