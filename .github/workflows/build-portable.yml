@@ -73,7 +73,7 @@ jobs:
           zip -qr ../../Makkaan-Smart-Caller-Complete-Portable-v0.6.3.zip .
           cd ../..
           unzip -t Makkaan-Smart-Caller-Complete-Portable-v0.6.3.zip
-          sha256sum Makkaan-Smart-Caller-Complete-Portable-v0.6.2.zip | tee SHA256SUMS.txt
+          sha256sum Makkaan-Smart-Caller-Complete-Portable-v0.6.3.zip | tee SHA256SUMS.txt
       - name: Upload portable release ZIP
         uses: actions/upload-artifact@v4
         with:
