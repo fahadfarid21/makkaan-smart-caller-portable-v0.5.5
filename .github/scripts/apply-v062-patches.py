@@ -49,7 +49,8 @@ new_save = """    const baselineActivities = new Set((before.recentActivities ||
       const toast = [...document.querySelectorAll('.alert, .toast, .msgprint, [role="alert"]')]
         .filter(isVisible).map(el => (el.innerText || '').trim()).join(' ').toLowerCase();
       const busy = [...document.querySelectorAll('button.btn-primary')].some(b => isVisible(b) && (b.disabled || /saving/i.test(b.innerText || '')));
-      if (/saved successfully|changes saved|document saved|saved/i.test(toast) && !busy) sawSaveSignal = true;
+      const successToast = /saved successfully|changes saved|document saved|updated successfully|successfully updated|record updated|^saved$|^updated$/i.test(toast) && !/failed|error|could not|unable|not saved|invalid/i.test(toast);
+      if (successToast && !busy) sawSaveSignal = true;
       try { latest = getLeadInfo(); } catch (_) { latest = null; }
       if (!latest || latest.id !== before.id) { stableMatches = 0; continue; }
       const current = latest.current || {};
