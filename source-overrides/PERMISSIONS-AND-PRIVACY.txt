@@ -1,0 +1,21 @@
+MAKKAAN SALES SIDECAR v0.6.4 — PERMISSIONS & PRIVACY
+
+MANIFEST DECLARATIONS
+Manifest version: 3
+Permissions: activeTab, storage, sidePanel, tabs, scripting
+Host permissions: https://prop-360.com/app/lead/* and https://generativelanguage.googleapis.com/*
+
+These are the permissions declared by the extension, not a certification that every permission is strictly necessary. The build validates manifest-referenced local paths; it cannot prove every runtime API call or remote data flow. Review the manifest and source before distributing to other users.
+
+DATA HANDLING
+- Imported CSVs, calculator and Investor Mode computations are intended to run locally.
+- CRM timeline reading and manual CRM updates operate against the matching authenticated Prop 360 page. Review every proposed update before saving.
+- The guided CRM update path allows Call as Activity Type and Connected / Not Connected as call outcomes. It does not write Qualification Status, owner, source or contact details.
+- CRM writes are supervised and the extension does not auto-dial. If save verification is uncertain, inspect the CRM record manually; the extension does not automatically resubmit.
+- Follow-up planner data and KPI counters use browser-local extension storage. Follow-up reminders do not create CRM tasks automatically. Manual KPI events can be inaccurate if entered incorrectly.
+- ChatGPT Bridge is user-initiated manual copying. It does not submit content automatically, but copied material may become third-party data if pasted into a hosted AI service.
+- If AI Notes uses Google's Generative Language API, selected text leaves the browser only when the feature is configured and explicitly invoked. It is processed under the provider's terms; key/account, usage limits or charges may apply.
+- Browser-local storage is not cross-device synchronization.
+
+SAFE DISTRIBUTION
+Do not distribute CRM exports, customer records, access tokens, passwords, browser cookies, private keys or API keys. Automated secret scans cannot guarantee the absence of every secret. Review the package and intended permissions before sharing.

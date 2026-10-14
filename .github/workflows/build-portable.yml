@@ -32,7 +32,7 @@ jobs:
           root = pathlib.Path('build/package').resolve()
           with zipfile.ZipFile(archive) as zf:
               for item in zf.infolist():
-                  name = item.filename.replace('\\\\', '/')
+                  name = item.filename.replace('\\', '/')
                   target = (root / name).resolve()
                   if root not in target.parents and target != root:
                       raise SystemExit(f'Unsafe archive path: {item.filename!r}')
