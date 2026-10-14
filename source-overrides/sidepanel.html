@@ -39,10 +39,10 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brandline"><span class="brandmark"><span></span></span><span>MAKKAAN</span><span class="brandsep">/</span><span>SALES SIDECAR</span><span class="version" title="Installed extension version">0.6.4</span></div>
+    <div class="brandline"><span class="brandmark"><span></span></span><span>MAKKAAN</span><span class="brandsep">/</span><span>SALES SIDECAR</span><span class="version" title="Installed extension version">0.6.5</span></div>
     <div class="headrow">
       <div><p class="eyebrow">YOUR DAILY SALES DESK</p><h1>Call smarter.</h1><p class="sub">Less admin. Better conversations.</p></div>
-      <button id="settingsBtn" class="iconbtn" title="AI settings" aria-label="AI settings">⚙</button>
+      <div class="head-actions"><button id="shortcutsBtn" class="iconbtn" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">⌨</button><button id="settingsBtn" class="iconbtn" title="AI settings" aria-label="AI settings">⚙</button></div>
     </div>
   </header>
   <nav class="agentnav" aria-label="Sales Sidecar tools">
@@ -101,8 +101,14 @@
         </div>
         <p class="hint">Old snapshot dates must be checked in the live CRM. Scores are sorting hintsâ€”not conversion predictions.</p>
       </div>
-      <div class="row between queueheading"><h2 id="queueCount">Call queue</h2><button id="clearRoster" class="textbtn dangertext">Clear roster</button></div>
-      <div id="queueList" class="lead-list"><div class="empty">Import the roster CSV to see leads.</div></div>
+      <div class="row between queueheading"><h2 id="queueCount">Call queue</h2><div class="queue-heading-actions"><button id="shortcutsQueueBtn" class="textbtn" type="button">Shortcuts</button><button id="clearRoster" class="textbtn dangertext">Clear roster</button></div></div>
+      <div class="queue-modes" role="group" aria-label="Queue status filter">
+        <button type="button" class="queue-mode active" data-qmode="active" aria-pressed="true">Active <span id="queueActiveCount">0</span></button>
+        <button type="button" class="queue-mode" data-qmode="done" aria-pressed="false">Done <span id="queueDoneCount">0</span></button>
+        <button type="button" class="queue-mode" data-qmode="all" aria-pressed="false">All <span id="queueAllCount">0</span></button>
+      </div>
+      <p id="queueRemaining" class="queue-remaining" aria-live="polite">0 active leads remaining</p>
+      <div id="queue-scroll" class="queue-scroll" tabindex="0" aria-label="Lead queue"><div id="queueList" class="lead-list"><div class="empty">Import the roster CSV to see leads.</div></div></div>
       <div class="stickybottom actionstack"><button id="briefSelected" class="btn btn-secondary full" disabled>Prepare pre-call brief</button><button id="openSelected" class="btn btn-primary full" disabled>Open selected lead in CRM</button></div>
     </section>
 
@@ -254,12 +260,21 @@
       <div class="panel slim"><h2>Quick actions</h2><div class="guideactions"><button id="guideToQueue" class="btn btn-secondary">Open Queue</button><button id="guideToBrief" class="btn btn-secondary">Pre-call Brief</button><button id="guideToUpdate" class="btn btn-primary">Call Update</button></div></div>
     </section>
   </main>
+  <template id="shortcutsTpl">
+    <p>Shortcuts work only when focus is outside text fields, editable content, selects and dialogs. They never dial or save CRM data.</p>
+    <dl class="shortcut-list">
+      <div><dt>Q</dt><dd>Open Queue</dd></div><div><dt>1–7</dt><dd>Desk, Queue, Calc, Brief, Update, AI Notes, Guide</dd></div>
+      <div><dt>O</dt><dd>Open selected lead in CRM (navigation only)</dd></div><div><dt>Shift + D</dt><dd>Mark selected lead Done / undo Done (asks for confirmation)</dd></div>
+      <div><dt>?</dt><dd>Show this guide</dd></div><div><dt>Esc</dt><dd>Close this guide</dd></div>
+    </dl>
+  </template>
+  <dialog id="shortcutsDialog" aria-labelledby="shortcutsTitle"><div class="shortcuts-dialog-head"><h2 id="shortcutsTitle">Keyboard shortcuts</h2><button id="closeShortcuts" type="button" class="btn btn-secondary">Close</button></div><div id="shortcutsContent"></div></dialog>
   <footer><span class="brandfoot">MAKKAAN <span>Â·</span> SALES SIDECAR</span><br>Local-first helper Â· No auto-dialing Â· Confirm every CRM write.</footer>
   <script src="calculator.js"></script>
   <script src="sidepanel.js"></script>
   <script src="daily-kpi-coach.js"></script>
   <script src="investor-launcher.js"></script>
-  <script src="sidecar-shell-polish.js"></script>
+  
   <script src="chatgpt-bridge.js"></script>
   <script src="follow-up-workflow.js"></script>
 </body>
