@@ -1,1 +1,0 @@
-Temporary build bootstrap marker; remove before v0.6.5 release.
