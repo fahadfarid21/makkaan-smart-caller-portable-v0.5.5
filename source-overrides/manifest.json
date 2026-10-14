@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Makkaan Sales Sidecar",
-  "version": "0.6.4",
-  "description": "Local-first Makkaan sales desk with verified fresh-note CRM updates, lead-aware follow-up reminders, automatic follow-up KPI credit, stronger Gemini briefs, and human-confirmed CRM writes. No auto-dialing or unsupervised CRM writes.",
+  "version": "0.6.5",
+  "description": "Local-first Makkaan sales desk with persistent Active/Done lead queue, verified atomic KPI tracking, safe keyboard shortcuts, and human-confirmed CRM writes. No auto-dialing or unsupervised CRM writes.",
   "permissions": [
     "activeTab",
     "storage",
