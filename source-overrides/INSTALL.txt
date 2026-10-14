@@ -1,0 +1,40 @@
+MAKKAAN SALES SIDECAR v0.6.4 — PORTABLE INSTALLATION
+
+PACKAGE
+Install only Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip. If you downloaded the GitHub Actions artifact, extract the outer artifact ZIP first; then extract the inner extension ZIP.
+
+CHROME
+1. Extract the extension ZIP to a permanent folder.
+2. Confirm manifest.json is directly inside the extracted folder.
+3. Open chrome://extensions.
+4. Enable Developer mode.
+5. Select Load unpacked and choose the folder containing manifest.json.
+6. Pin the extension if desired, then open its side panel.
+
+BRAVE
+1. Extract the extension ZIP to a permanent folder.
+2. Open brave://extensions.
+3. Enable Developer mode.
+4. Select Load unpacked and choose the folder containing manifest.json.
+5. Pin and open the extension from the toolbar / Extensions menu.
+
+Do not delete or move the extracted folder after loading it. The browser loads the unpacked extension from that location.
+
+WORKFLOWS AND PERMISSIONS
+- Calculator and Investor Mode run locally and do not require an AI API call.
+- CSV Queue import processes the selected file in the browser. Import only approved lead lists and keep the package ZIP free of client data.
+- CRM timeline and guided updates require an authenticated tab on the supported Prop 360 page and depend on the CRM's current page structure.
+- CRM writes are user-initiated and supervised. The extension does not auto-dial, does not change Qualification Status, and does not automatically resubmit an unverified save.
+- ChatGPT Bridge is a manual copy-and-paste workflow; it does not call the ChatGPT API or send content automatically.
+- AI Notes may require a separately configured Gemini API key and network access. It sends selected text to Google only when configured and explicitly used. Review content and provider terms; API charges or limits may apply.
+
+UPDATES AND BACKUPS
+Keep a copy of your current extension ZIP. To update, extract the new release to a new folder, use Load unpacked on that folder, and verify that the UI displays version 0.6.4 before removing the previous installation. Do not overwrite a working folder without a backup.
+
+DATA AND DEVICE SYNC
+Install the unpacked extension separately in each browser/profile. Browser-local storage and imported CSV data do not automatically sync between computers. Do not treat browser account sync as a backup.
+
+REMOVAL
+Open the browser extensions page and choose Remove for Makkaan Sales Sidecar. Export or back up anything you need first. Removing an extension may remove its browser-local data.
+
+This guide does not claim live browser verification. Complete MANUAL-TEST-CHECKLIST.txt using an authorized test lead before production use.

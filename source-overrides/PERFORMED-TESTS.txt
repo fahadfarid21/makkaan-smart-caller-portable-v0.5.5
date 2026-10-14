@@ -1,21 +1,27 @@
-MAKKAAN SMART CALLER COMPLETE PORTABLE v0.6.2 — AUTOMATED VALIDATION SCOPE
+MAKKAAN SALES SIDECAR v0.6.4 — AUTOMATED VALIDATION SCOPE
 
-Automated GitHub Actions checks for the release:
-- Manifest JSON parses and reports version 0.6.2.
-- Required manifest entry points exist in the packaged extension.
-- JavaScript syntax checks pass for all packaged top-level JavaScript files.
-- Fresh-comment patch invariants pass: CRM Comments is replaced with only the new note; old Comments are not appended and no timestamp is added by the extension.
-- The Gemini brief prompt contains the lead-specific output sections.
-- Follow-up planner contains no global chrome.runtime.sendMessage interception and includes KPI completion integration.
-- Required files exist, the portable ZIP is created, and ZIP integrity is checked.
-- SHA-256 checksum is generated for the actual v0.6.2 ZIP.
+The GitHub Actions build generates a per-run copy of this report inside the output package, including the source commit and workflow run ID.
 
-Not claimed by these checks:
-- Browser launch or visual rendering in Chrome/Brave.
-- Successful live Prop-360 CRM interaction or save verification on a real account.
-- Live Gemini API success with the user's key/quota.
-- Correctness of user-entered KPI counts or target basis.
-- Accuracy of current market data, rent, CPI, savings rates, availability or project terms.
-- Guarantee of finding every possible secret or privacy issue.
+Automated checks in the release workflow:
+- Manifest JSON parses, is Manifest V3 and declares version 0.6.4.
+- Every local path referenced by the manifest exists in the package.
+- Required extension entry points and all local script/style assets referenced by extension HTML exist.
+- Node.js syntax checks pass for every top-level packaged JavaScript file.
+- CRM call mode accepts only Connected / Not Connected and Activity Type is restricted to Call.
+- Fresh-note logic replaces the current Comments value with only the new note; the previous value is not appended and the extension does not add a timestamp.
+- The CRM update path does not write Qualification Status, owner, source or contact details.
+- Post-save verification has a bounded wait, reads values back, and does not auto-resubmit when verification is uncertain.
+- The Gemini brief contains lead-specific sections and instructions not to invent facts, prices, availability or commitments.
+- Follow-up completion integration is present, reminders remain local and no global chrome.runtime.sendMessage interception is added.
+- Investor quick calculator layout is placed full-width before the editor/presentation layout.
+- Generated extension ZIP passes ZIP integrity validation and receives a SHA-256 checksum.
 
-Complete MANUAL-TEST-CHECKLIST.txt before production use. Initial CRM write tests must use an authorized test record.
+Not established by automated checks:
+- Live Chrome/Brave UI rendering, interaction, keyboard accessibility or service-worker health.
+- Successful live Prop 360 CRM save on the authenticated user account.
+- That any CRM write has the correct result on a real record.
+- Live Gemini API success, key/quota validity or provider availability.
+- Accuracy of manually entered KPI values or current property prices, rents, approvals, availability, inflation or projected returns.
+- Exhaustive detection of every possible privacy or security issue.
+
+Complete MANUAL-TEST-CHECKLIST.txt before production use. First CRM write tests must use an authorized test record. Do not describe unperformed manual tests as passed.

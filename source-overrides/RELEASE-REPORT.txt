@@ -1,0 +1,22 @@
+MAKKAAN SALES SIDECAR — RELEASE REPORT v0.6.4
+
+Release package: Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip
+Manifest version: 0.6.4
+Manifest generation: Manifest V3
+Current build source: main / active maintained source branch
+Artifact source of truth: successful GitHub Actions workflow run and its SHA256SUMS.txt
+
+RELEASE CONTENT
+- Full portable extension package built from the maintained overrides plus frozen bootstrap input for legacy components.
+- Investor quick calculator placement fix: calculator mounts full-width before the editor/presentation layout.
+- Fresh-note CRM comment replacement and bounded post-save verification.
+- Follow-up planner and daily KPI coach.
+- Current installation, privacy and test documentation.
+
+AUTOMATED RELEASE VALIDATION
+The workflow must pass manifest/path validation, JavaScript syntax checks, critical safety/feature invariants, packaging and unzip integrity checks before uploading the artifact. PERFORMED-TESTS.txt in each generated artifact records that workflow run and source commit.
+
+MANUAL VALIDATION STATUS
+Live Chrome/Brave rendering, authenticated Prop 360 save behavior, real field immutability, user-configured Gemini calls and presentation usability require manual testing. These are not marked passed by the static build. Use an authorized test lead only.
+
+Do not use this report as evidence of verified client outcomes, live CRM writes or guaranteed financial results.

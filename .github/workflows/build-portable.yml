@@ -1,10 +1,9 @@
-name: Build Smart Caller portable ZIP
+name: Build and verify Makkaan Sales Sidecar
 
 on:
   push:
     branches:
-      - feat/smart-caller-v0.6.0-daily-kpi-coach
-      - feat/smart-caller-v0.6.1-follow-up-workflow
+      - main
       - feat/smart-caller-v0.6.2-fresh-notes-ai-brief
   pull_request:
     branches:
@@ -20,23 +19,22 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-      - name: Extract base package, apply overrides and deterministic CRM patches and v0.6.4 Investor UI
+      - name: Extract bootstrap package, apply maintained overrides and deterministic CRM safety patches
         shell: bash
         run: |
           set -euo pipefail
-          test -f Makkaan-Sales-Sidecar-Portable-v0.5.5.zip
+          test -f build-inputs/seed-extension.zip
           rm -rf build
           mkdir -p build/package
           python3 - <<'PY'
           import pathlib, zipfile
-          archive = pathlib.Path('Makkaan-Sales-Sidecar-Portable-v0.5.5.zip')
-          root = pathlib.Path('build/package')
+          archive = pathlib.Path('build-inputs/seed-extension.zip')
+          root = pathlib.Path('build/package').resolve()
           with zipfile.ZipFile(archive) as zf:
               for item in zf.infolist():
-                  # The original Windows-created ZIP stores backslashes as separators.
-                  name = item.filename.replace('\\', '/')
+                  name = item.filename.replace('\\\\', '/')
                   target = (root / name).resolve()
-                  if root.resolve() not in target.parents and target != root.resolve():
+                  if root not in target.parents and target != root:
                       raise SystemExit(f'Unsafe archive path: {item.filename!r}')
                   if item.is_dir():
                       target.mkdir(parents=True, exist_ok=True)
@@ -46,41 +44,56 @@ jobs:
           PY
           cp -a source-overrides/. build/package/
           python3 .github/scripts/apply-v062-patches.py build/package
-          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('build/package/manifest.json','utf8'));if(m.manifest_version!==3||m.version!=='0.6.4')process.exit(1);for(const p of [m.background?.service_worker,m.options_page,m.side_panel?.default_path,...(m.content_scripts||[]).flatMap(x=>x.js||[]),...(Object.values(m.action?.default_icon||{})),...(Object.values(m.icons||{}))])if(p&&!fs.existsSync('build/package/'+p)){console.error('Missing manifest file:',p);process.exit(2)}"
       - name: Check JavaScript syntax
         shell: bash
         run: |
           set -euo pipefail
           find build/package -maxdepth 1 -name '*.js' -print0 | while IFS= read -r -d '' file; do node --check "$file"; done
-      - name: Verify required features and package
+      - name: Verify manifest, assets and release safety invariants
         shell: bash
         run: |
           set -euo pipefail
-          test -f build/package/daily-kpi-coach.js
-          test -f build/package/follow-up-workflow.js
-          grep -q 'follow-up-workflow.js' build/package/sidepanel.html
-          grep -q 'id="view-desk"' build/package/sidepanel.html
-          grep -q 'daily-kpi-coach.js' build/package/sidepanel.html
-          grep -q '0.6.4</span>' build/package/sidepanel.html
-          grep -q 'const newComment = note || null;' build/package/content.js
-          ! grep -q 'oldComment' build/package/content.js
-          grep -q 'LEAD SNAPSHOT' build/package/sidepanel.js
-          ! grep -q 'chrome.runtime.sendMessage = function' build/package/follow-up-workflow.js
-          grep -q 'Investor Mode' build/package/README.md
-          grep -q 'mountQuickInvestorCalculator' build/package/investor-mode.js
-          grep -q 'quickInvestorCalc' build/package/investor-mode.js
-          grep -Fq "layout.insertAdjacentElement('beforebegin',quick)" build/package/investor-mode.js
+          python3 .github/scripts/verify-release.py build/package
+      - name: Record build provenance and automated checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > build/package/PERFORMED-TESTS.txt <<EOF
+          MAKKAAN SALES SIDECAR v0.6.4 — AUTOMATED VALIDATION REPORT
+          Source commit: $GITHUB_SHA
+          Workflow run: $GITHUB_RUN_ID (attempt $GITHUB_RUN_ATTEMPT)
+          This report is generated only after the release verification step has passed.
+
+          PASS — Manifest V3 JSON and v0.6.4 version.
+          PASS — all manifest entry points and local HTML script/style references exist.
+          PASS — Node.js syntax checks for all top-level packaged JavaScript files.
+          PASS — Connected/Not Connected call outcomes and Call-only Activity Type guardrails.
+          PASS — fresh CRM note replaces Comments; old comments are not appended or timestamped by the extension.
+          PASS — update path excludes Qualification Status, owner, source and contact details.
+          PASS — bounded post-save read-back and no automatic resubmission when verification is uncertain.
+          PASS — required lead-specific AI brief sections and anti-invention guidance.
+          PASS — follow-up completion/KPI integration, local reminder design and no global runtime interception.
+          PASS — Quick Investor Calculator full-width placement invariant.
+          PASS — required documentation is versioned for v0.6.4.
+
+          NOT VERIFIED — live Chrome/Brave rendering or accessibility; live authenticated Prop 360 save behavior; live Gemini API success; current market/property assumptions; accuracy of manual KPI entries. Complete MANUAL-TEST-CHECKLIST.txt with an authorized test record before production use.
+          EOF
+      - name: Package and verify portable extension ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
           cd build/package
-          zip -qr ../../Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip .
+          zip -qr ../../dist/Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip .
           cd ../..
-          unzip -t Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip
-          sha256sum Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip | tee SHA256SUMS.txt
-      - name: Upload portable release ZIP
+          unzip -t dist/Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip
+          sha256sum dist/Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip | tee dist/SHA256SUMS.txt
+      - name: Upload verified portable extension ZIP
         uses: actions/upload-artifact@v4
         with:
           name: Makkaan-Smart-Caller-Complete-Portable-v0.6.4
           path: |
-            Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip
-            SHA256SUMS.txt
+            dist/Makkaan-Smart-Caller-Complete-Portable-v0.6.4.zip
+            dist/SHA256SUMS.txt
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 90
