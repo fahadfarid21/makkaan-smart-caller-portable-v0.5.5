@@ -102,7 +102,7 @@ require("msKpiDaily" in kpi and "chrome.storage.local" in kpi, "daily KPI must u
 require("quickInvestorCalc" in investor and "mountQuickInvestorCalculator" in investor, "Quick Investor Calculator missing")
 require("layout.insertAdjacentElement('beforebegin',quick)" in investor, "Quick Investor Calculator full-width placement invariant missing")
 require("0.6.4" in readme and "0.6.4" in install and "0.6.4" in report and "0.6.4" in manual and "0.6.4" in performed, "current version missing in package docs")
-require("live Chrome/Brave" in performed and "not" in performed.lower(), "test report must state live-browser verification limits")
+require("live chrome/brave" in performed.lower() and "not" in performed.lower(), "test report must state live-browser verification limits")
 require("QUALIFICATION" in read("PERMISSIONS-AND-PRIVACY.txt").upper(), "privacy note must discuss protected Qualification Status")
 require(not list(root.glob("*.csv")), "package must not include imported lead CSVs")
 

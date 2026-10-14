@@ -133,4 +133,4 @@ assert "new Date().toLocaleString()" not in content[content.index("const desc = 
 assert "append the typed/refined note" not in sidepanel
 assert "LEAD SNAPSHOT" in sidepanel and "READY-TO-SEND WHATSAPP" in sidepanel
 assert "post-save state could not be independently verified" in content
-print("v0.6.2 source patches applied and invariants checked.")
+print("v0.6.4 CRM safety patches applied and invariants checked.")

@@ -28,7 +28,7 @@ Keep the installed folder in place. To update, load a new extracted folder and v
 ## Repository layout
 
 - `.github/workflows/build-portable.yml`: reproducible build and verification workflow.
-- `.github/scripts/apply-v062-patches.py`: applies deterministic CRM-save and AI-brief fixes to the seed package.
+- `.github/scripts/apply-crm-safety-patches.py`: applies deterministic CRM-save and AI-brief fixes to the seed package.
 - `.github/scripts/verify-release.py`: checks manifest entry points and critical safety/feature invariants.
 - `source-overrides/`: maintained v0.6.4 extension files and current installation/test documentation.
 - `build-inputs/seed-extension.zip`: frozen bootstrap input for legacy components not yet maintained as standalone source files. This is a build input, **not a distributable release**. The only intended install package is v0.6.4.
